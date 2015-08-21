@@ -2,7 +2,11 @@
 
 var AppConstants = require('../constants/AppConstants'),
     UserStore = require('../stores/UserStore'),
-    React = require('react-native');
+    React = require('react-native'),
+    Recorder  = require('react-native-screcorder'),
+    RNFS = require('react-native-fs'),
+    Video = require('react-native-video'),
+    Camera = require('react-native-camera');
 
 var {
   View,

@@ -42,14 +42,19 @@ var Prompt = React.createClass({
   render: function() {
     return(
       <View style={styles.container}>
-        <Text style={styles.bringIt}>Ready to bring it?</Text>
-        <Text style={styles.promptTitle}>{this.state.promptTitle}</Text>
-        <Text style={styles.promptText}>{this.state.promptText}</Text>
+        <Text style={styles.bringIt}>READY TO BRING IT?</Text>
+        <Text style={styles.promptTitle}>{this.state.promptTitle.toUpperCase()}</Text>
+        <Text style={styles.promptText}>{this.state.promptText.toUpperCase()}</Text>
         
         <View style={styles.center}>
           <TouchableHighlight onPress={this.handleReady}>
-            <Text style={styles.ready}>IM READY</Text>
+            <View style={styles.readyButton}>
+            <Text style={styles.readyText}>I'M READY</Text>
+            </View>
           </TouchableHighlight>
+        </View>
+
+        <View style={styles.arrowUp}>
         </View>
       </View>
     );
@@ -58,36 +63,72 @@ var Prompt = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    backgroundColor: '#699A97', //TODO: Need image background
+    backgroundColor: '#00eae7', //TODO: Need image background
     height: AppConstants.HEIGHT,
     flexDirection: 'column',
     justifyContent: 'center',
   },
   bringIt: {
-    color: 'white',
+    color: '#0072ff',
     fontSize: 15,
+    fontFamily: 'BrownStd-Bold',
+    shadowRadius: 0,
+    shadowOffset: {width: 3, height: -3},
+    shadowColor: '#00eae7',
+    shadowOpacity: 1,
   },
   promptTitle: {
-    color: 'white',
+    color: '#0072ff',
     marginTop: 30,
     fontSize: 30,
+    fontFamily: 'BrownStd-Bold',
+    shadowRadius: 0,
+    shadowOffset: {width: 3, height: -3},
+    shadowColor: '#00eae7',
+    shadowOpacity: 1,
   },
   promptText: {
-    color: 'white',
+    color: '#0072ff',
     fontSize: 20,
+    fontFamily: 'BrownStd-Bold',
+    shadowRadius: 0,
+    shadowOffset: {width: 3, height: -3},
+    shadowColor: '#00eae7',
+    shadowOpacity: 1,
   },
-  ready: { //TODO: THIS WILL BE AN IMAGE 
-    width: AppConstants.WIDTH / 5,
-    height: 30,
+  readyButton: {
+    width: AppConstants.WIDTH / 3,
+    height: 35,
     backgroundColor: 'white',
-    color: 'purple',
-    borderWidth: 1,
-    borderColor: 'purple',
+    borderWidth: 3,
+    borderColor: '#0072ff',
+    shadowRadius: 0,
+    shadowOffset: {width: 3, height: -3},
+    shadowColor: 'white',
+    shadowOpacity: 1,
+  },
+  readyText: {
+    color: '#0072ff',
+    fontFamily: 'BrownStd-Bold',
+    fontSize: 20,
+    marginLeft: 10,
   },
   center: {
     alignItems: 'center',
     paddingTop: 50
   },
+  arrowUp: {
+    width: 55,
+    height: 55,
+    backgroundColor: 'red',
+    //borderTopLeftRadius: 55,
+    borderLeftColor: 'transparent',
+    //borderTopRightRadius: 55,
+    //borderRightColor: 'transparent',
+    //borderBottomLeftRadius: 55,
+    //borderBottomColor: 'black',
+    transform: {rotate: 'right'}
+  }
 });
 
 module.exports = Prompt;

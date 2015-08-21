@@ -10,6 +10,7 @@ var AppConstants = require('../constants/AppConstants'),
     Share = require('../components/Share'),
     Quit = require('../components/Quit'),
     Error = require('../components/Error'),
+    Question = require('../components/Question'),
     React = require('react-native'),
     _ = require('lodash');
 
@@ -45,17 +46,18 @@ var App = React.createClass({
     this.setState({
       user: UserStore.get()
     });
+    console.log('THIS.STATE.USER.RECORDING', this.state.user.recording);
   },
 
   render: function() {
     var component;
 
-    if (!this.state.user.ready) { //TODO: MAKE SURE WE HAVE THE QUESTION FROM PARSE FIRST
+    if (!this.state.user.ready && !this.state.user.recording) { //TODO: MAKE SURE WE HAVE THE QUESTION FROM PARSE FIRST
       component = <Prompt {...this.state} {...this.props} />
     } else if (this.state.user.ready) { //TODO: FIX
       component = <Countdown {...this.state} {...this.props} />
     } else if (this.state.user.recording) {
-      component = <Recording {...this.state} {...this.props} />
+      component = <Question {...this.state} {...this.props} />
     } else if (this.state.user.legal) {
       component = <Legal {...this.state} {...this.props} />
     } else if (this.state.user.share) {

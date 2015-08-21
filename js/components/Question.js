@@ -4,7 +4,7 @@ var AppConstants = require('../constants/AppConstants'),
     AppActions = require('../actions/AppActions'),
     React = require('react-native'),
     Recorder  = require('react-native-screcorder'),
-    //RNFS = require('react-native-fs'),
+    RNFS = require('react-native-fs'),
     Parse = require('parse').Parse,
     Video = require('react-native-video');
 
@@ -62,32 +62,32 @@ var Question = React.createClass({
         file: url
       });
 
-      // RNFS.readFile(url.split('file:///private')[1], false)
-      // .then(function(contents){
-      //   var parseFile, NewAsset, AssetData;
+      RNFS.readFile(url.split('file:///private')[1], false)
+      .then(function(contents){
+        var parseFile, NewAsset, AssetData;
 
-      //   parseFile = new Parse.File('video.mp4', {base64: contents});
-      //   parseFile.save().then(function(data){
-      //     console.log(Object.keys(data));
-      //     AssetData = Parse.Object.extend("Assets");
+        parseFile = new Parse.File('video.mp4', {base64: contents});
+        parseFile.save().then(function(data){
+          console.log(Object.keys(data));
+          AssetData = Parse.Object.extend("Assets");
 
-      //     NewAsset = new AssetData();
-      //     NewAsset.set("account_id", id);
-      //     NewAsset.set("asset", parseFile);
-      //     NewAsset.save({
-      //       success: function(data){
-      //         console.log('yaaa', data);
-      //       },
-      //       error: function(data){
-      //        console.log('damn');
-      //       }
-      //     });
+          NewAsset = new AssetData();
+          NewAsset.set("account_id", id);
+          NewAsset.set("asset", parseFile);
+          NewAsset.save({
+            success: function(data){
+              console.log('yaaa', data);
+            },
+            error: function(data){
+             console.log('damn');
+            }
+          });
 
-      //   }, function(error) {
-      //     // The file either could not be read, or could not be saved to Parse.
-      //     console.log(error);
-      //   });
-      // });
+        }, function(error) {
+          // The file either could not be read, or could not be saved to Parse.
+          console.log(error);
+        });
+      });
     });
   },
 

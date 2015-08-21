@@ -39,9 +39,8 @@ var Countdown = React.createClass({
     return(
       <View style={styles.container}>
         <View style={styles.countdown}>
-          <Text>Countdown</Text>
+          <Text style={styles.countdownNumbers}>{this.state.user.timeRemaining}</Text>
         </View>
-        <Text style={{color: 'red'}}>{this.state.user.timeRemaining}</Text>
         <Text style={styles.promptTitle}>{this.state.promptTitle}</Text>
         <Text style={styles.promptText}>{this.state.promptText}</Text>
       </View>
@@ -61,6 +60,9 @@ var styles = StyleSheet.create({
     height: 200,
     backgroundColor: '#FC569B',
     marginLeft: (AppConstants.WIDTH / 2) / 2,
+  },
+  countdownNumbers: {
+    color: 'white',
   },
   promptTitle: {
     color: 'white',
