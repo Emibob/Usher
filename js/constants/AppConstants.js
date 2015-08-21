@@ -12,7 +12,7 @@ module.exports = {
   WIDTH: WIDTH,
 
   ActionTypes: keyMirror({
-    FETCH_USER: null,
-    SET_QUESTION: null,
+    USER_READY: null,
+    START_COUNTDOWN: null,
   }),
 };

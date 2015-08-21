@@ -7,29 +7,36 @@ var AppDispatcher = require('../dispatcher/AppDispatcher'),
 
 var CHANGE_EVENT = 'change';
 
-var _user = {};
+var _user = {
+  timeRemaining: null
+};
 
 /**
- * handleUpdateSign()
- * @param  {string} sign
+ * handleUserReady()
+ * @param  {bool}
  */
-function handleFetchUser(user) {
-  console.log('user received: ', user);
-  _user.id = user;
-}
-
 function handleUserReady(bool) {
-  console.log('user is ready?', bool);
   _user.ready = bool;
 }
 
+/**
+ * handleCountdown()
+ * @param  {number} seconds
+ */
 function handleCountdown(seconds){
-  // while (seconds >= 0){
-  //   setInterval(function(){
-  //     //set countdown state #
-  //     seconds--;
-  //   }, 1000);
-  // }
+
+  _user.timeRemaining = seconds;
+
+  if (_user.timeRemaining > 0){
+
+    setTimeout(function(){
+      handleCountdown(_user.timeRemaining)
+    }, 1000);
+
+    _user.timeRemaining--;
+
+    UserStore.emitChange();
+  }
 }
 
 
@@ -66,10 +73,6 @@ var UserStore = _.extend({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
-    case AppConstants.ActionTypes.FETCH_USER:
-      handleFetchUser(action.user);
-      UserStore.emitChange();
-      break;
     case AppConstants.ActionTypes.USER_READY:
       handleUserReady(action.ready);
       UserStore.emitChange();

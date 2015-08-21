@@ -42,7 +42,9 @@ var App = React.createClass({
   },
 
   _onChange: function() {
-    this.setState({user: UserStore.get()});
+    this.setState({
+      user: UserStore.get()
+    });
   },
 
   render: function() {

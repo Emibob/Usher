@@ -15,7 +15,7 @@ var {
 var Prompt = React.createClass({
   getInitialState: function() {
     return {
-      user: UserStore.get(),
+      user: this.props.user,
       promptTitle: this.props.promptTitle,
       promptText: this.props.promptText,
     };
@@ -30,7 +30,9 @@ var Prompt = React.createClass({
   },
 
   _onChange: function() {
-    this.setState({user: UserStore.get()});
+    this.setState({
+      user: UserStore.get()
+    });
   },
 
   handleReady: function(){

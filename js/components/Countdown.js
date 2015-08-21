@@ -14,7 +14,7 @@ var {
 var Countdown = React.createClass({
   getInitialState: function() {
     return {
-      user: UserStore.get(),
+      user: this.props.user,
       promptTitle: this.props.promptTitle,
       promptText: this.props.promptText,
     };
@@ -22,8 +22,7 @@ var Countdown = React.createClass({
 
   componentDidMount: function() {
     UserStore.addChangeListener(this._onChange);
-    //AppAction.startCountdown(3);
-    //TODO: Begin timeout to start countdown
+    AppAction.startCountdown(4);
   },
 
   componentWillUnmount: function() {
@@ -31,7 +30,9 @@ var Countdown = React.createClass({
   },
 
   _onChange: function() {
-    this.setState({user: UserStore.get()});
+    this.setState({
+      user: UserStore.get(),
+    });
   },
 
   render: function() {
@@ -40,6 +41,7 @@ var Countdown = React.createClass({
         <View style={styles.countdown}>
           <Text>Countdown</Text>
         </View>
+        <Text style={{color: 'red'}}>{this.state.user.timeRemaining}</Text>
         <Text style={styles.promptTitle}>{this.state.promptTitle}</Text>
         <Text style={styles.promptText}>{this.state.promptText}</Text>
       </View>
