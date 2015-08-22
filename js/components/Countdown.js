@@ -3,12 +3,15 @@
 var AppConstants = require('../constants/AppConstants'),
     UserStore = require('../stores/UserStore'),
     AppAction = require('../actions/AppActions'),
-    React = require('react-native');
+    React = require('react-native'),
+    ᐱ = require('../utils/Percent'),
+    Animated = require('Animated');
 
 var {
   View,
   StyleSheet,
   Text,
+  TouchableHighlight,
 } = React;
 
 var Countdown = React.createClass({
@@ -17,32 +20,52 @@ var Countdown = React.createClass({
       user: this.props.user,
       promptTitle: this.props.promptTitle,
       promptText: this.props.promptText,
+      bounceValue: new Animated.Value(0),
     };
   },
 
   componentDidMount: function() {
     UserStore.addChangeListener(this._onChange);
     AppAction.startCountdown(4);
+    this.state.bounceValue.setValue(0.5);
   },
 
   componentWillUnmount: function() {
     UserStore.removeChangeListener(this._onChange);
   },
 
+  handleDone: function(){
+    //TODO:
+    console.log('handleDone');
+  },
+
   _onChange: function() {
     this.setState({
       user: UserStore.get(),
     });
+
+    //TODO: make more awesome...
+    Animated.spring(this.state.bounceValue, {toValue: 1.0, friction: 0}).start()
   },
 
   render: function() {
     return(
       <View style={styles.container}>
+
         <View style={styles.countdown}>
-          <Text style={styles.countdownNumbers}>{this.state.user.timeRemaining}</Text>
+          <Animated.Text style={{color: 'white', transform: [{scale: this.state.bounceValue}]}}>{this.state.user.timeRemaining}</Animated.Text>
         </View>
         <Text style={styles.promptTitle}>{this.state.promptTitle}</Text>
         <Text style={styles.promptText}>{this.state.promptText}</Text>
+
+        <View style={styles.center}>
+          <TouchableHighlight onPress={this.handleDone}>
+            <View style={styles.doneButton}>
+            <Text style={styles.doneText}>I'M DONE</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+
       </View>
     );
   }
@@ -50,26 +73,66 @@ var Countdown = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    backgroundColor: '#699A97', //TODO: Need image background
+    backgroundColor: '#00eae7',
     height: AppConstants.HEIGHT,
     flexDirection: 'column',
     justifyContent: 'center',
   },
   countdown: {
     width: AppConstants.WIDTH / 2,
-    height: 200,
+    height: AppConstants.WIDTH / 2,
     backgroundColor: '#FC569B',
     marginLeft: (AppConstants.WIDTH / 2) / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   countdownNumbers: {
     color: 'white',
+    fontFamily: 'BrownStd-Bold',
+    fontSize: ᐱ.percent.h(40),
   },
   promptTitle: {
     color: 'white',
+    fontFamily: 'BrownStd-Bold',
+    shadowRadius: 0,
+    shadowOffset: {width: 2},
+    shadowColor: '#00eae7',
+    shadowOpacity: 1,
+    backgroundColor: 'transparent',
+    paddingLeft: ᐱ.percent.w(8),
   },
   promptText: {
     color: 'white',
-  }
+    fontFamily: 'BrownStd-Bold',
+    shadowRadius: 0,
+    shadowOffset: {width: 2},
+    shadowColor: '#00eae7',
+    shadowOpacity: 1,
+    backgroundColor: 'transparent',
+    paddingLeft: ᐱ.percent.w(8),
+  },
+  doneButton: {
+    width: AppConstants.WIDTH / 3,
+    height: ᐱ.percent.h(4.8),
+    backgroundColor: 'white',
+    borderWidth: 3,
+    borderColor: '#0072ff',
+    shadowRadius: 0,
+    shadowOffset: {width: 3, height: -3},
+    shadowColor: 'white',
+    shadowOpacity: 1,
+  },
+  doneText: {
+    color: '#0072ff',
+    fontFamily: 'BrownStd-Bold',
+    fontSize: ᐱ.percent.h(3),
+    marginLeft: ᐱ.percent.w(3),
+    backgroundColor: 'transparent',
+  },
+  center: {
+    alignItems: 'center',
+    backgroundColor: 'transparent'
+  },
 });
 
 module.exports = Countdown;

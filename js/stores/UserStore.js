@@ -27,7 +27,6 @@ function handleUserReady(bool) {
 function handleCountdown(seconds){
 
   _user.timeRemaining = seconds;
-  console.log('_user.timeRemaining', _user.timeRemaining);
 
   if (_user.timeRemaining > 0){
 
@@ -40,7 +39,7 @@ function handleCountdown(seconds){
     UserStore.emitChange();
   } else if (_user.timeRemaining === 0){
     _user.recording = true;
-    _user.ready = false;
+    //_user.ready = false; TODO: uncomment when done styling the countdown
     UserStore.emitChange();
   }
 }

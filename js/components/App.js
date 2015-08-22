@@ -46,7 +46,6 @@ var App = React.createClass({
     this.setState({
       user: UserStore.get()
     });
-    console.log('THIS.STATE.USER.RECORDING', this.state.user.recording);
   },
 
   render: function() {
