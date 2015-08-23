@@ -8,7 +8,7 @@ var AppDispatcher = require('../dispatcher/AppDispatcher'),
 var CHANGE_EVENT = 'change';
 
 var _user = {
-  timeRemaining: null,
+  timeRemaining: 4,
   recording: false,
 };
 
@@ -26,13 +26,11 @@ function handleUserReady(bool) {
  */
 function handleCountdown(seconds){
 
-  _user.timeRemaining = seconds;
-
-  if (_user.timeRemaining > 0){
+  if (seconds > 0){
 
     setTimeout(function(){
       handleCountdown(_user.timeRemaining)
-    }, 1000);
+    }, 1500);
 
     _user.timeRemaining--;
 

@@ -5,7 +5,8 @@ var AppConstants = require('../constants/AppConstants'),
     AppAction = require('../actions/AppActions'),
     React = require('react-native'),
     ᐱ = require('../utils/Percent'),
-    Animated = require('Animated');
+    Animated = require('Animated'),
+    tweenState = require('react-tween-state');
 
 var {
   View,
@@ -14,20 +15,24 @@ var {
   TouchableHighlight,
 } = React;
 
+var test = 4;
+
 var Countdown = React.createClass({
+  mixins: [tweenState.Mixin],
+
   getInitialState: function() {
     return {
       user: this.props.user,
       promptTitle: this.props.promptTitle,
       promptText: this.props.promptText,
-      bounceValue: new Animated.Value(0),
+      marginTop: 0,
+      opacity: 1,
     };
   },
 
   componentDidMount: function() {
     UserStore.addChangeListener(this._onChange);
     AppAction.startCountdown(4);
-    this.state.bounceValue.setValue(0.5);
   },
 
   componentWillUnmount: function() {
@@ -35,7 +40,7 @@ var Countdown = React.createClass({
   },
 
   handleDone: function(){
-    //TODO:
+    //TODO: START RECORDING
     console.log('handleDone');
   },
 
@@ -44,8 +49,27 @@ var Countdown = React.createClass({
       user: UserStore.get(),
     });
 
-    //TODO: make more awesome...
-    Animated.spring(this.state.bounceValue, {toValue: 1.0, friction: 0}).start()
+    if(test !== this.state.user.timeRemaining){
+      this.animateOpacity();
+      test = this.state.user.timeRemaining;
+    }
+  },
+
+  animateOpacity: function(){
+
+    this.state.marginTop = 0;
+    this.state.opacity = 1;
+
+    this.tweenState('marginTop', {
+      easing: tweenState.easingTypes.easeOutQuint,
+      duration: 1000,
+      endValue: this.state.marginTop === -40 ? 0 : -40,
+    });
+    this.tweenState('opacity', {
+      easing: tweenState.easingTypes.easeOutQuint,
+      duration: 1000,
+      endValue: this.state.opacity === 0 ? 1 : 0,
+    });
   },
 
   render: function() {
@@ -53,15 +77,17 @@ var Countdown = React.createClass({
       <View style={styles.container}>
 
         <View style={styles.countdown}>
-          <Animated.Text style={{color: 'white', transform: [{scale: this.state.bounceValue}]}}>{this.state.user.timeRemaining}</Animated.Text>
+          <Text style={styles.lowerText}>{this.state.user.timeRemaining}</Text>
+          <Animated.Text style={{backgroundColor: 'transparent', position:'absolute', marginLeft: 70, fontSize: 30, marginTop: this.getTweeningValue('marginTop'), opacity: this.getTweeningValue('opacity'), color: 'white'}}>{this.state.user.timeRemaining + 1}</Animated.Text>
         </View>
+
         <Text style={styles.promptTitle}>{this.state.promptTitle}</Text>
         <Text style={styles.promptText}>{this.state.promptText}</Text>
 
         <View style={styles.center}>
           <TouchableHighlight onPress={this.handleDone}>
             <View style={styles.doneButton}>
-            <Text style={styles.doneText}>I'M DONE</Text>
+            <Text style={styles.doneText}>IM DONE</Text>
             </View>
           </TouchableHighlight>
         </View>
@@ -77,6 +103,12 @@ var styles = StyleSheet.create({
     height: AppConstants.HEIGHT,
     flexDirection: 'column',
     justifyContent: 'center',
+  },
+  lowerText: {
+    position:'absolute', 
+    marginLeft: 70, 
+    color: 'red', 
+    fontSize: 30,
   },
   countdown: {
     width: AppConstants.WIDTH / 2,
