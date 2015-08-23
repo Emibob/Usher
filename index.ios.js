@@ -10,7 +10,8 @@ var React = require('react-native'),
 var {
   AppRegistry,
   View,
-  Text
+  Text,
+  StatusBarIOS,
 } = React;
 
 var Usher = React.createClass({
@@ -20,6 +21,8 @@ var Usher = React.createClass({
     );
   }
 });
+
+StatusBarIOS.setHidden(true);
 
 AppRegistry.registerComponent('Usher', () => Usher);
 

@@ -27,6 +27,7 @@
 		923FBC891B87B40800AFC419 /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923FBC881B87B40400AFC419 /* libRCTCamera.a */; };
 		923FBC941B87B95100AFC419 /* libRNRecorder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 923FBC911B87B92D00AFC419 /* libRNRecorder.a */; };
 		924F2D5B1B87C00B00BF306D /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 924F2D5A1B87C00B00BF306D /* fonts */; };
+		9285113D1B8A7DB900DCD22D /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928511371B8A7DAD00DCD22D /* libRCTVideo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +136,13 @@
 			remoteGlobalIDString = D42CB35C1B2538DE00FD0AE2;
 			remoteInfo = RNRecorderTests;
 		};
+		928511361B8A7DAD00DCD22D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 928511291B8A7DAD00DCD22D /* RCTVideo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTVideo;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -164,6 +172,7 @@
 		923FBC8A1B87B92D00AFC419 /* RNRecorder.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNRecorder.xcodeproj; path = "node_modules/react-native-screcorder/ios/RNRecorder.xcodeproj"; sourceTree = "<group>"; };
 		923FBC951B87B95700AFC419 /* libSCRecorder.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSCRecorder.a; path = "node_modules/react-native-screcorder/ios/Libraries/build/Debug-iphoneos/libSCRecorder.a"; sourceTree = "<group>"; };
 		924F2D5A1B87C00B00BF306D /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
+		928511291B8A7DAD00DCD22D /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "node_modules/react-native-video/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +187,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9285113D1B8A7DB900DCD22D /* libRCTVideo.a in Frameworks */,
 				923FBC941B87B95100AFC419 /* libRNRecorder.a in Frameworks */,
 				923FBC891B87B40800AFC419 /* libRCTCamera.a in Frameworks */,
 				923FBC821B87B3E200AFC419 /* libRNFS.a in Frameworks */,
@@ -304,6 +314,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				928511291B8A7DAD00DCD22D /* RCTVideo.xcodeproj */,
 				923FBC8A1B87B92D00AFC419 /* RNRecorder.xcodeproj */,
 				923FBC831B87B40400AFC419 /* RCTCamera.xcodeproj */,
 				923FBC7C1B87B3D400AFC419 /* RNFS.xcodeproj */,
@@ -372,6 +383,14 @@
 			children = (
 				923FBC911B87B92D00AFC419 /* libRNRecorder.a */,
 				923FBC931B87B92D00AFC419 /* RNRecorderTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9285112A1B8A7DAD00DCD22D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				928511371B8A7DAD00DCD22D /* libRCTVideo.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -476,6 +495,10 @@
 				{
 					ProductGroup = 00C302E01ABCB9EE00DB3ED1 /* Products */;
 					ProjectRef = 00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */;
+				},
+				{
+					ProductGroup = 9285112A1B8A7DAD00DCD22D /* Products */;
+					ProjectRef = 928511291B8A7DAD00DCD22D /* RCTVideo.xcodeproj */;
 				},
 				{
 					ProductGroup = 139FDEE71B06529A00C62182 /* Products */;
@@ -599,6 +622,13 @@
 			fileType = wrapper.cfbundle;
 			path = RNRecorderTests.xctest;
 			remoteRef = 923FBC921B87B92D00AFC419 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		928511371B8A7DAD00DCD22D /* libRCTVideo.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTVideo.a;
+			remoteRef = 928511361B8A7DAD00DCD22D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

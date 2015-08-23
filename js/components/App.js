@@ -51,20 +51,10 @@ var App = React.createClass({
   render: function() {
     var component;
 
-    if (!this.state.user.ready && !this.state.user.recording) { //TODO: MAKE SURE WE HAVE THE QUESTION FROM PARSE FIRST
-      component = <Prompt {...this.state} {...this.props} />
-    } else if (this.state.user.ready) { //TODO: FIX
-      component = <Countdown {...this.state} {...this.props} />
-    } else if (this.state.user.recording) {
-      component = <Question {...this.state} {...this.props} />
-    } else if (this.state.user.legal) {
-      component = <Legal {...this.state} {...this.props} />
-    } else if (this.state.user.share) {
-      component = <Share {...this.state} {...this.props} />
-    } else if (this.state.user.quit) {
-      component = <Quit {...this.state} {...this.props} />
+    if(!this.state.user.recording){
+      component = <Prompt {...this.state} {...this.props} />;
     } else {
-      component = <Error {...this.state} {...this.props} />
+      component = <Question {...this.state} {...this.props} />;
     }
 
     return(

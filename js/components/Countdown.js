@@ -6,16 +6,16 @@ var AppConstants = require('../constants/AppConstants'),
     React = require('react-native'),
     ᐱ = require('../utils/Percent'),
     Animated = require('Animated'),
+    Camera = require('react-native-camera'),
     tweenState = require('react-tween-state');
 
 var {
   View,
   StyleSheet,
   Text,
-  TouchableHighlight,
 } = React;
 
-var test = 4;
+var seconds = 3;
 
 var Countdown = React.createClass({
   mixins: [tweenState.Mixin],
@@ -32,7 +32,7 @@ var Countdown = React.createClass({
 
   componentDidMount: function() {
     UserStore.addChangeListener(this._onChange);
-    AppAction.startCountdown(4);
+    AppAction.startCountdown(3);
   },
 
   componentWillUnmount: function() {
@@ -49,9 +49,9 @@ var Countdown = React.createClass({
       user: UserStore.get(),
     });
 
-    if(test !== this.state.user.timeRemaining){
+    if(seconds !== this.state.user.timeRemaining){
       this.animateOpacity();
-      test = this.state.user.timeRemaining;
+      seconds = this.state.user.timeRemaining;
     }
   },
 
@@ -73,97 +73,70 @@ var Countdown = React.createClass({
   },
 
   render: function() {
+    var countdown;
+
+    if(this.state.user.ready){
+      countdown = (
+        <View style={{backgroundColor: 'transparent'}}>
+        <Text style={styles.lowerText}>{this.state.user.timeRemaining}</Text>
+        <Animated.Text style={{fontWeight: 'bold', backgroundColor: 'transparent', position:'absolute', fontSize: 30, marginTop: this.getTweeningValue('marginTop'), opacity: this.getTweeningValue('opacity'), color: 'white'}}>
+          {this.state.user.timeRemaining + 1}
+        </Animated.Text>
+        </View>
+      );
+    }
+
     return(
-      <View style={styles.container}>
-
         <View style={styles.countdown}>
-          <Text style={styles.lowerText}>{this.state.user.timeRemaining}</Text>
-          <Animated.Text style={{backgroundColor: 'transparent', position:'absolute', marginLeft: 70, fontSize: 30, marginTop: this.getTweeningValue('marginTop'), opacity: this.getTweeningValue('opacity'), color: 'white'}}>{this.state.user.timeRemaining + 1}</Animated.Text>
+          <Camera 
+            ref="camera"
+            style={styles.camera}
+            type={Camera.constants.Type.front}>
+            
+            {countdown}
+          
+          </Camera>
+
+          <View style={styles.cameraFilter}></View>
         </View>
-
-        <Text style={styles.promptTitle}>{this.state.promptTitle}</Text>
-        <Text style={styles.promptText}>{this.state.promptText}</Text>
-
-        <View style={styles.center}>
-          <TouchableHighlight onPress={this.handleDone}>
-            <View style={styles.doneButton}>
-            <Text style={styles.doneText}>IM DONE</Text>
-            </View>
-          </TouchableHighlight>
-        </View>
-
-      </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#00eae7',
-    height: AppConstants.HEIGHT,
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
   lowerText: {
     position:'absolute', 
-    marginLeft: 70, 
-    color: 'red', 
+    color: 'white', 
     fontSize: 30,
+    fontWeight: 'bold',
   },
   countdown: {
-    width: AppConstants.WIDTH / 2,
-    height: AppConstants.WIDTH / 2,
-    backgroundColor: '#FC569B',
-    marginLeft: (AppConstants.WIDTH / 2) / 2,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
   countdownNumbers: {
     color: 'white',
     fontFamily: 'BrownStd-Bold',
     fontSize: ᐱ.percent.h(40),
-  },
-  promptTitle: {
-    color: 'white',
-    fontFamily: 'BrownStd-Bold',
-    shadowRadius: 0,
-    shadowOffset: {width: 2},
-    shadowColor: '#00eae7',
-    shadowOpacity: 1,
     backgroundColor: 'transparent',
-    paddingLeft: ᐱ.percent.w(8),
   },
-  promptText: {
-    color: 'white',
-    fontFamily: 'BrownStd-Bold',
-    shadowRadius: 0,
-    shadowOffset: {width: 2},
-    shadowColor: '#00eae7',
-    shadowOpacity: 1,
-    backgroundColor: 'transparent',
-    paddingLeft: ᐱ.percent.w(8),
-  },
-  doneButton: {
-    width: AppConstants.WIDTH / 3,
-    height: ᐱ.percent.h(4.8),
+  camera: {
+    width: ᐱ.percent.w(60),
+    height: ᐱ.percent.w(60),
     backgroundColor: 'white',
-    borderWidth: 3,
-    borderColor: '#0072ff',
-    shadowRadius: 0,
-    shadowOffset: {width: 3, height: -3},
-    shadowColor: 'white',
-    shadowOpacity: 1,
+    marginLeft: (ᐱ.percent.w(100) - ᐱ.percent.w(60)) /2,
+    position: 'absolute',
+    marginTop: ᐱ.percent.h(-10),
   },
-  doneText: {
-    color: '#0072ff',
-    fontFamily: 'BrownStd-Bold',
-    fontSize: ᐱ.percent.h(3),
-    marginLeft: ᐱ.percent.w(3),
-    backgroundColor: 'transparent',
-  },
-  center: {
-    alignItems: 'center',
-    backgroundColor: 'transparent'
+  cameraFilter:{
+    width: ᐱ.percent.w(60),
+    height: ᐱ.percent.w(60),
+    backgroundColor: '#ff3e9d',
+    marginLeft: (ᐱ.percent.w(100) - ᐱ.percent.w(60)) /2,
+    opacity: 0.7,
+    position: 'absolute',
+    marginTop: ᐱ.percent.h(-10),
   },
 });
 

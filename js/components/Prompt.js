@@ -4,7 +4,8 @@ var AppConstants = require('../constants/AppConstants'),
     UserStore = require('../stores/UserStore'),
     AppAction = require('../actions/AppActions'),
     React = require('react-native'),
-    ᐱ = require('../utils/Percent');
+    ᐱ = require('../utils/Percent'),
+    Countdown = require('./Countdown');
 
 var {
   View,
@@ -41,7 +42,48 @@ var Prompt = React.createClass({
     AppAction.userReady(true);
   },
 
-  render: function() { //TODO: bring in camera
+  handleDone: function(){
+    console.log('DONE');
+  },
+
+  render: function() {
+    var countdown, logo, button, readyText, copy;
+
+    if(this.state.user.ready){
+      countdown = <Countdown {...this.state} {...this.props}/>;
+      logo = <View />;
+      readyText = <View />;
+      copy = (
+        <View style={{backgroundColor: 'transparent'}}>
+          <Text style={styles.promptTitle2}>{this.state.promptTitle.toUpperCase()}</Text>
+          <Text style={styles.promptText2}>{this.state.promptText.toUpperCase()}</Text>
+        </View>
+      );
+      button = (
+        <TouchableHighlight onPress={this.handleDone}>
+          <View style={styles.readyButton}>
+            <Text style={styles.readyText}>IM DONE</Text>
+          </View>
+        </TouchableHighlight>
+      );
+    } else {
+      logo = <Image style={styles.logo} source={require('image!diamonLogo')} />;
+      readyText = <Text style={styles.bringIt}>READY TO BRING IT?</Text>;
+      copy = (
+        <View style={{backgroundColor: 'transparent'}}>
+          <Text style={styles.promptTitle}>{this.state.promptTitle.toUpperCase()}</Text>
+          <Text style={styles.promptText}>{this.state.promptText.toUpperCase()}</Text>
+        </View>
+      );
+      button = (
+        <TouchableHighlight onPress={this.handleReady}>
+          <View style={styles.readyButton}>
+            <Text style={styles.readyText}>IM READY</Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }
+
     return(
       <View style={styles.container}>
 
@@ -50,20 +92,16 @@ var Prompt = React.createClass({
         <View style={styles.yellowTriangle}></View>
         <View style={styles.weezerPinkTriangle}></View>
 
-        <View style={styles.camera}></View>
+        {countdown}
 
-        <Image style={styles.logo} source={require('image!diamonLogo')} />
+        {logo}
 
-        <Text style={styles.bringIt}>READY TO BRING IT?</Text>
-        <Text style={styles.promptTitle}>{this.state.promptTitle.toUpperCase()}</Text>
-        <Text style={styles.promptText}>{this.state.promptText.toUpperCase()}</Text>
+        {readyText}
+
+        {copy}
         
         <View style={styles.center}>
-          <TouchableHighlight onPress={this.handleReady}>
-            <View style={styles.readyButton}>
-            <Text style={styles.readyText}>I'M READY</Text>
-            </View>
-          </TouchableHighlight>
+          {button}
         </View>
 
       </View>
@@ -87,14 +125,6 @@ var styles = StyleSheet.create({ //TODO: use more flexbox
     transform: [{rotate: '20deg'}],
     opacity: 0.3,
   },
-  camera: {
-    width: ᐱ.percent.w(20),
-    height: ᐱ.percent.w(20),
-    backgroundColor: 'white',
-    marginLeft: (ᐱ.percent.w(100) - ᐱ.percent.w(20)) /2,
-    position: 'absolute',
-    marginTop: ᐱ.percent.h(-23),
-  },
   logo: {
     width: ᐱ.percent.h(15),
     height: ᐱ.percent.h(14),
@@ -103,7 +133,7 @@ var styles = StyleSheet.create({ //TODO: use more flexbox
     marginBottom: ᐱ.percent.h(2),
   },
   bringIt: {
-    color: '#0072ff',
+    color: 'white',
     fontSize: ᐱ.percent.h(2.3),
     fontFamily: 'BrownStd-Bold',
     shadowRadius: 0,
@@ -114,7 +144,7 @@ var styles = StyleSheet.create({ //TODO: use more flexbox
     paddingLeft: ᐱ.percent.w(8),
   },
   promptTitle: {
-    color: '#0072ff',
+    color: 'white',
     marginTop: 30,
     fontSize: ᐱ.percent.h(3.9),
     fontFamily: 'BrownStd-Bold',
@@ -127,7 +157,34 @@ var styles = StyleSheet.create({ //TODO: use more flexbox
     paddingBottom: 0,
   },
   promptText: {
-    color: '#0072ff',
+    color: 'white',
+    fontSize: ᐱ.percent.h(2.7),
+    fontFamily: 'BrownStd-Bold',
+    shadowRadius: 0,
+    shadowOffset: {width: 2},
+    shadowColor: '#00eae7',
+    shadowOpacity: 1,
+    backgroundColor: 'transparent',
+    paddingLeft: ᐱ.percent.w(8),
+    paddingRight: ᐱ.percent.w(8),
+    paddingTop: 0,
+    marginBottom: ᐱ.percent.h(4),
+  },
+  promptTitle2: {
+    color: 'white',
+    marginTop: ᐱ.percent.h(25),
+    fontSize: ᐱ.percent.h(3.9),
+    fontFamily: 'BrownStd-Bold',
+    shadowRadius: 0,
+    shadowOffset: {width: 2},
+    shadowColor: '#00eae7',
+    shadowOpacity: 1,
+    backgroundColor: 'transparent',
+    paddingLeft: ᐱ.percent.w(8),
+    paddingBottom: 0,
+  },
+  promptText2: {
+    color: 'white',
     fontSize: ᐱ.percent.h(2.7),
     fontFamily: 'BrownStd-Bold',
     shadowRadius: 0,

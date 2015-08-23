@@ -8,7 +8,7 @@ var AppDispatcher = require('../dispatcher/AppDispatcher'),
 var CHANGE_EVENT = 'change';
 
 var _user = {
-  timeRemaining: 4,
+  timeRemaining: 3,
   recording: false,
 };
 
