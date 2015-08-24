@@ -6,7 +6,8 @@ var AppConstants = require('../constants/AppConstants'),
     Recorder  = require('react-native-screcorder'),
     RNFS = require('react-native-fs'),
     Parse = require('parse').Parse,
-    Video = require('react-native-video');
+    Video = require('react-native-video'),
+    ᐱ = require('../utils/Percent');
 
 var {
   View,
@@ -108,9 +109,7 @@ var Question = React.createClass({
     }
 
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', height: AppConstants.HEIGHT}}>
-        <TouchableHighlight style={{margin: 20}} onPress={this.record}><Text>{this.props.question}</Text></TouchableHighlight>
-        <TouchableHighlight onPress={this.save}><Text>Save</Text></TouchableHighlight>
+      <View>
           <Recorder
             ref="recorder"
             config={config}
@@ -118,6 +117,13 @@ var Question = React.createClass({
             style={styles.camera}>
           </Recorder>
           {component}
+
+          <TouchableHighlight onPress={this.capture}>
+          <View style={styles.readyButton}>
+            <Text style={styles.readyText}>IM DONE</Text>
+          </View>
+        </TouchableHighlight>
+
       </View>
     );
   },
@@ -127,14 +133,11 @@ module.exports = Question;
 
 var styles = StyleSheet.create({
   camera: {
-    position: 'absolute',
-    height: 100,
-    width: 78,
-    right: 10,
-    bottom: 10,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    height: ᐱ.percent.w(60),
+    width: ᐱ.percent.w(60),
+    backgroundColor:'transparent',
   },
   backgroundVideo: {
     position: 'absolute',
@@ -142,6 +145,24 @@ var styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
+  },
+  readyButton: {
+    width: AppConstants.WIDTH / 3,
+    height: ᐱ.percent.h(4.8),
+    backgroundColor: 'white',
+    borderWidth: 3,
+    borderColor: '#0072ff',
+    shadowRadius: 0,
+    shadowOffset: {width: 3, height: -3},
+    shadowColor: 'white',
+    shadowOpacity: 1,
+  },
+  readyText: {
+    color: '#0072ff',
+    fontFamily: 'BrownStd-Bold',
+    fontSize: ᐱ.percent.h(3),
+    marginLeft: ᐱ.percent.w(3),
+    backgroundColor: 'transparent',
   },
 });
 
@@ -155,17 +176,19 @@ var config = {
     format: "MPEG4",
     quality: "MediumQuality", // HighestQuality || MediumQuality || LowQuality
     filters: [
-      {
-      "CIfilter": "CIColorControls",
-      "animations": [{
-        "name": "inputSaturation",
-        "startValue": 50,
-        "endValue": 0,
-        "startTime": 0,
-        "duration": 3.5
-      }]
-    },
-    {"CIfilter":"CIExposureAdjust", "inputEV": 0.7}
+    //   {
+    //   "CIfilter": "CIColorControls",
+    //   "animations": [{
+    //     "name": "inputSaturation",
+    //     "startValue": 50,
+    //     "endValue": 0,
+    //     "startTime": 0,
+    //     "duration": 1
+    //   }]
+    // },
+    //{"CIfilter":"CIHueAdjust", "inputAngle": 0.7}
+    //{"CIfilter":"CIVibrance", "inputAmount": 0.7}
+    {"CIfilter":"CIColorInvert"}
     ]
   },
   audio: {

@@ -7,7 +7,8 @@ var AppConstants = require('../constants/AppConstants'),
     ᐱ = require('../utils/Percent'),
     Animated = require('Animated'),
     Camera = require('react-native-camera'),
-    tweenState = require('react-tween-state');
+    tweenState = require('react-tween-state'),
+    Question = require('./Question');
 
 var {
   View,
@@ -73,8 +74,9 @@ var Countdown = React.createClass({
   },
 
   render: function() {
-    var countdown;
+    var countdown, cam;
 
+    //COUNTDOWN
     if(this.state.user.ready){
       countdown = (
         <View style={{backgroundColor: 'transparent'}}>
@@ -84,20 +86,34 @@ var Countdown = React.createClass({
         </Animated.Text>
         </View>
       );
+    } else {
+      countdown = <View />
     }
 
-    return(
+    //CAMERA
+    if(!this.state.user.recording){ //use the camera
+      cam = (
         <View style={styles.countdown}>
           <Camera 
             ref="camera"
             style={styles.camera}
             type={Camera.constants.Type.front}>
-            
             {countdown}
-          
           </Camera>
-
           <View style={styles.cameraFilter}></View>
+        </View>
+      );
+    } else { //use the video
+      cam = (
+        <View style={styles.countdown}>
+          <Question {...this.state} {...this.props} />
+        </View>
+      )
+    }
+
+    return(
+        <View style={styles.countdown}>
+          {cam}
         </View>
     );
   }
@@ -125,7 +141,6 @@ var styles = StyleSheet.create({
     width: ᐱ.percent.w(60),
     height: ᐱ.percent.w(60),
     backgroundColor: 'white',
-    marginLeft: (ᐱ.percent.w(100) - ᐱ.percent.w(60)) /2,
     position: 'absolute',
     marginTop: ᐱ.percent.h(-10),
   },
@@ -133,7 +148,6 @@ var styles = StyleSheet.create({
     width: ᐱ.percent.w(60),
     height: ᐱ.percent.w(60),
     backgroundColor: '#ff3e9d',
-    marginLeft: (ᐱ.percent.w(100) - ᐱ.percent.w(60)) /2,
     opacity: 0.7,
     position: 'absolute',
     marginTop: ᐱ.percent.h(-10),

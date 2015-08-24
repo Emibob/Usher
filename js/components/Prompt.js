@@ -59,13 +59,7 @@ var Prompt = React.createClass({
           <Text style={styles.promptText2}>{this.state.promptText.toUpperCase()}</Text>
         </View>
       );
-      button = (
-        <TouchableHighlight onPress={this.handleDone}>
-          <View style={styles.readyButton}>
-            <Text style={styles.readyText}>IM DONE</Text>
-          </View>
-        </TouchableHighlight>
-      );
+      button = <View />
     } else {
       logo = <Image style={styles.logo} source={require('image!diamonLogo')} />;
       readyText = <Text style={styles.bringIt}>READY TO BRING IT?</Text>;

@@ -9,7 +9,7 @@ var CHANGE_EVENT = 'change';
 
 var _user = {
   timeRemaining: 3,
-  recording: false,
+  recording: false
 };
 
 /**

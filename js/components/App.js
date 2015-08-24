@@ -51,11 +51,8 @@ var App = React.createClass({
   render: function() {
     var component;
 
-    if(!this.state.user.recording){
+
       component = <Prompt {...this.state} {...this.props} />;
-    } else {
-      component = <Question {...this.state} {...this.props} />;
-    }
 
     return(
       <View>
