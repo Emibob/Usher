@@ -70,7 +70,21 @@ var Question = React.createClass({
   pause: function() {
     this.refs.recorder.pause();
     this.setState({recording: false});
-    setTimeout(this.save, 2000);
+    //setTimeout(this.save, 2000);
+    setTimeout(this.review, 2000);
+  },
+
+  review: function(){
+
+    this.refs.recorder.save((err, url) => {
+      console.log(url);
+      
+      this.setState({
+        done: true,
+        file: url
+      });
+
+    });
   },
 
   save: function() {
@@ -79,11 +93,11 @@ var Question = React.createClass({
     this.refs.recorder.save((err, url) => {
       // Playing with the generated video
 
-      console.log(url);
-      this.setState({
-        done: true,
-        file: url
-      });
+      //console.log(url);
+      // this.setState({
+      //   done: true,
+      //   file: url
+      // });
 
       //TODO: Might need to call an action that sets a timeout on the video playback
       //so we can progress on to save/trash
@@ -148,11 +162,19 @@ var Question = React.createClass({
     //BUTTONS
     if(this.state.done){
       button = (
+        <View>
         <TouchableHighlight onPress={this.resetUser} underlayColor="transparent">
           <View style={styles.readyButton}>
             <Text style={styles.readyText}>TRASH</Text>
           </View>
         </TouchableHighlight>
+
+        <TouchableHighlight onPress={this.save} underlayColor="transparent">
+          <View style={styles.readyButton}>
+            <Text style={styles.readyText}>SAVE</Text>
+          </View>
+        </TouchableHighlight>
+        </View>
       );
     } else if(this.state.user.startRecord){
       button = (
