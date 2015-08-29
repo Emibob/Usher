@@ -9,8 +9,20 @@ var CHANGE_EVENT = 'change';
 
 var _user = {
   timeRemaining: 3,
-  recording: false
+  startRecord: false,
+  recordInProgress: false,
+  init: false,
 };
+
+/**
+ * handleInit()
+ * @param  {bool}
+ */
+function handleInitApp() {
+  console.log('handleInitApp is called');
+  _user.init = true;
+  UserStore.emitChange();
+}
 
 /**
  * handleUserReady()
@@ -18,6 +30,7 @@ var _user = {
  */
 function handleUserReady(bool) {
   _user.ready = bool;
+  UserStore.emitChange();
 }
 
 /**
@@ -36,10 +49,34 @@ function handleCountdown(seconds){
 
     UserStore.emitChange();
   } else if (_user.timeRemaining === 0){
-    _user.recording = true;
-    //_user.ready = false; TODO: uncomment when done styling the countdown
+    _user.startRecord = true;
+    _user.ready = false;
     UserStore.emitChange();
   }
+}
+
+/**
+ * handleSetRecordInProgress()
+ */
+
+function handleSetRecordInProgress(){
+  _user.recordInProgress = true;
+  UserStore.emitChange();
+}
+
+/**
+ * handleUserReset()
+ */
+
+function handleUserReset(){
+  //overwrite any falses we changed or added to _user obj
+  _user = {
+    timeRemaining: 3,
+    startRecord: false,
+    recordInProgress: false,
+    init: false,
+  };
+  UserStore.emitChange();
 }
 
 
@@ -76,12 +113,24 @@ var UserStore = _.extend({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
+    case AppConstants.ActionTypes.INIT_APP:
+      handleInitApp();
+      UserStore.emitChange();
+      break;
     case AppConstants.ActionTypes.USER_READY:
       handleUserReady(action.ready);
       UserStore.emitChange();
       break;
     case AppConstants.ActionTypes.START_COUNTDOWN:
       handleCountdown(action.seconds);
+      UserStore.emitChange();
+      break;
+    case AppConstants.ActionTypes.RECORD_IN_PROGRESS:
+      handleSetRecordInProgress();
+      UserStore.emitChange();
+      break;
+    case AppConstants.ActionTypes.USER_RESET:
+      handleUserReset();
       UserStore.emitChange();
       break;
 

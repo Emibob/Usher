@@ -38,29 +38,13 @@ var Prompt = React.createClass({
     });
   },
 
-  handleReady: function(){
-    AppAction.userReady(true);
-  },
-
-  handleDone: function(){
-    console.log('DONE');
+  handleAppInit: function(){
+    AppAction.initApp();
   },
 
   render: function() {
     var countdown, logo, button, readyText, copy;
-
-    if(this.state.user.ready){
-      countdown = <Countdown {...this.state} {...this.props}/>;
-      logo = <View />;
-      readyText = <View />;
-      copy = (
-        <View style={{backgroundColor: 'transparent'}}>
-          <Text style={styles.promptTitle2}>{this.state.promptTitle.toUpperCase()}</Text>
-          <Text style={styles.promptText2}>{this.state.promptText.toUpperCase()}</Text>
-        </View>
-      );
-      button = <View />
-    } else {
+      
       logo = <Image style={styles.logo} source={require('image!diamonLogo')} />;
       readyText = <Text style={styles.bringIt}>READY TO BRING IT?</Text>;
       copy = (
@@ -70,28 +54,21 @@ var Prompt = React.createClass({
         </View>
       );
       button = (
-        <TouchableHighlight onPress={this.handleReady}>
+        <TouchableHighlight onPress={this.handleAppInit}>
           <View style={styles.readyButton}>
             <Text style={styles.readyText}>IM READY</Text>
           </View>
         </TouchableHighlight>
       );
-    }
 
     return(
       <View style={styles.container}>
 
         <Image style={styles.pattern} source={require('image!pattern')} />
-        <View style={styles.greenTriangle}></View>
-        <View style={styles.yellowTriangle}></View>
-        <View style={styles.weezerPinkTriangle}></View>
 
         {countdown}
-
         {logo}
-
         {readyText}
-
         {copy}
         
         <View style={styles.center}>
@@ -103,7 +80,7 @@ var Prompt = React.createClass({
   }
 });
 
-var styles = StyleSheet.create({ //TODO: use more flexbox
+var styles = StyleSheet.create({
   container: {
     backgroundColor: '#00eae7',
     height: AppConstants.HEIGHT,
@@ -164,33 +141,6 @@ var styles = StyleSheet.create({ //TODO: use more flexbox
     paddingTop: 0,
     marginBottom: ᐱ.percent.h(4),
   },
-  promptTitle2: {
-    color: 'white',
-    marginTop: ᐱ.percent.h(25),
-    fontSize: ᐱ.percent.h(3.9),
-    fontFamily: 'BrownStd-Bold',
-    shadowRadius: 0,
-    shadowOffset: {width: 2},
-    shadowColor: '#00eae7',
-    shadowOpacity: 1,
-    backgroundColor: 'transparent',
-    paddingLeft: ᐱ.percent.w(8),
-    paddingBottom: 0,
-  },
-  promptText2: {
-    color: 'white',
-    fontSize: ᐱ.percent.h(2.7),
-    fontFamily: 'BrownStd-Bold',
-    shadowRadius: 0,
-    shadowOffset: {width: 2},
-    shadowColor: '#00eae7',
-    shadowOpacity: 1,
-    backgroundColor: 'transparent',
-    paddingLeft: ᐱ.percent.w(8),
-    paddingRight: ᐱ.percent.w(8),
-    paddingTop: 0,
-    marginBottom: ᐱ.percent.h(4),
-  },
   readyButton: {
     width: AppConstants.WIDTH / 3,
     height: ᐱ.percent.h(4.8),
@@ -213,35 +163,11 @@ var styles = StyleSheet.create({ //TODO: use more flexbox
     alignItems: 'center',
     backgroundColor: 'transparent'
   },
-  weezerPinkTriangle: {
-    width: ᐱ.percent.w(130),
-    height: ᐱ.percent.h(100),
-    backgroundColor: '#ffc8d6',
-    transform: [{scaleX: 0.8}, {scaleY: 0.5}, {rotate: '30deg'}],
-    marginLeft: ᐱ.percent.w(-80),
-    marginTop: ᐱ.percent.h(-26),
-    position: 'absolute',
-    borderWidth: 5,
-    borderColor: '#00eae7',
-  },
-  greenTriangle: {
-    width: ᐱ.percent.w(100),
-    height: ᐱ.percent.h(40),
-    backgroundColor: '#1ee735',
-    position: 'absolute',
-    transform: [{scaleX: 0.8}, {scaleY: 0.5}, {rotate: '40deg'}],
-    marginTop: ᐱ.percent.h(-10),
-    marginLeft: ᐱ.percent.w(-37),
-  },
-  yellowTriangle: {
-    width: ᐱ.percent.w(140),
-    height: ᐱ.percent.h(40),
-    backgroundColor: '#ffff47',
-    position: 'absolute',
-    transform: [{scaleX: 0.8}, {scaleY: 0.5}, {rotate: '-65deg'}],
-    marginTop: ᐱ.percent.h(23),
-    marginLeft: ᐱ.percent.w(-74),
-  }
+  // triangles: { //<Image style={styles.triangles} source={require('image!triangles')} />
+  //   width: ᐱ.percent.w(60),
+  //   flex: 1,
+  //   backgroundColor: 'transparent',
+  // }
 });
 
 module.exports = Prompt;

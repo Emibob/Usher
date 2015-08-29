@@ -14,5 +14,8 @@ module.exports = {
   ActionTypes: keyMirror({
     USER_READY: null,
     START_COUNTDOWN: null,
+    RECORD_IN_PROGRESS: null,
+    USER_RESET: null,
+    INIT_APP: null,
   }),
 };

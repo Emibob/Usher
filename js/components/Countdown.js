@@ -6,7 +6,6 @@ var AppConstants = require('../constants/AppConstants'),
     React = require('react-native'),
     ᐱ = require('../utils/Percent'),
     Animated = require('Animated'),
-    Camera = require('react-native-camera'),
     tweenState = require('react-tween-state'),
     Question = require('./Question');
 
@@ -24,8 +23,6 @@ var Countdown = React.createClass({
   getInitialState: function() {
     return {
       user: this.props.user,
-      promptTitle: this.props.promptTitle,
-      promptText: this.props.promptText,
       marginTop: 0,
       opacity: 1,
     };
@@ -40,10 +37,6 @@ var Countdown = React.createClass({
     UserStore.removeChangeListener(this._onChange);
   },
 
-  handleDone: function(){
-    //TODO: START RECORDING
-    console.log('handleDone');
-  },
 
   _onChange: function() {
     this.setState({
@@ -74,46 +67,20 @@ var Countdown = React.createClass({
   },
 
   render: function() {
-    var countdown, cam;
+    var countdown;
 
-    //COUNTDOWN
-    if(this.state.user.ready){
       countdown = (
-        <View style={{backgroundColor: 'transparent'}}>
-        <Text style={styles.lowerText}>{this.state.user.timeRemaining}</Text>
-        <Animated.Text style={{fontWeight: 'bold', backgroundColor: 'transparent', position:'absolute', fontSize: 30, marginTop: this.getTweeningValue('marginTop'), opacity: this.getTweeningValue('opacity'), color: 'white'}}>
-          {this.state.user.timeRemaining + 1}
-        </Animated.Text>
+        <View style={{backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={styles.lowerText}>{this.state.user.timeRemaining}</Text>
+          <Animated.Text style={{fontWeight: 'bold', backgroundColor: 'transparent', position:'absolute', fontSize: 30, marginTop: this.getTweeningValue('marginTop'), opacity: this.getTweeningValue('opacity'), color: 'white'}}>
+            {this.state.user.timeRemaining + 1}
+          </Animated.Text>
         </View>
       );
-    } else {
-      countdown = <View />
-    }
-
-    //CAMERA
-    if(!this.state.user.recording){ //use the camera
-      cam = (
-        <View style={styles.countdown}>
-          <Camera 
-            ref="camera"
-            style={styles.camera}
-            type={Camera.constants.Type.front}>
-            {countdown}
-          </Camera>
-          <View style={styles.cameraFilter}></View>
-        </View>
-      );
-    } else { //use the video
-      cam = (
-        <View style={styles.countdown}>
-          <Question {...this.state} {...this.props} />
-        </View>
-      )
-    }
 
     return(
         <View style={styles.countdown}>
-          {cam}
+          {countdown}
         </View>
     );
   }
@@ -121,7 +88,7 @@ var Countdown = React.createClass({
 
 var styles = StyleSheet.create({
   lowerText: {
-    position:'absolute', 
+    position: 'absolute', 
     color: 'white', 
     fontSize: 30,
     fontWeight: 'bold',
@@ -130,27 +97,14 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
+    width: ᐱ.percent.w(60),
+    height: ᐱ.percent.w(60),
   },
   countdownNumbers: {
     color: 'white',
     fontFamily: 'BrownStd-Bold',
     fontSize: ᐱ.percent.h(40),
     backgroundColor: 'transparent',
-  },
-  camera: {
-    width: ᐱ.percent.w(60),
-    height: ᐱ.percent.w(60),
-    backgroundColor: 'white',
-    position: 'absolute',
-    marginTop: ᐱ.percent.h(-10),
-  },
-  cameraFilter:{
-    width: ᐱ.percent.w(60),
-    height: ᐱ.percent.w(60),
-    backgroundColor: '#ff3e9d',
-    opacity: 0.7,
-    position: 'absolute',
-    marginTop: ᐱ.percent.h(-10),
   },
 });
 
