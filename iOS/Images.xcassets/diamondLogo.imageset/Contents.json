@@ -3,11 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "triangles.png"
+      "filename" : "diamonLogo-1-2.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "diamonLogo.png"
     },
     {
       "idiom" : "universal",
