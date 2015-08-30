@@ -195,12 +195,12 @@ var Question = React.createClass({
       );
     }
 
-    //COUNTDOWN
+    //COUNTDOWN TODO: Countdown transparent background isn't happening...
     if(this.state.user.ready) {
       countdown = (
         <View style={styles.countdown}>
           <View style={styles.cameraFilter} />
-          <Countdown {...this.state} {...this.props} />
+          <Countdown style={styles.countdownNumbers} {...this.state} {...this.props} />
         </View>
       );
     } else {
@@ -273,6 +273,9 @@ var styles = StyleSheet.create({
     position: 'absolute',
     marginTop: ᐱ.percent.w(-60),
   },
+  countdownNumbers: {
+    backgroundColor:'transparent',
+  },
   recorder: {
     height: ᐱ.percent.w(60),
     width: ᐱ.percent.w(60),
@@ -318,7 +321,7 @@ var styles = StyleSheet.create({
   },
   copy: {
     backgroundColor: 'transparent',
-    width: ᐱ.percent.w(100)
+    width: ᐱ.percent.w(100),
   },
   legal: {
     position: 'absolute',

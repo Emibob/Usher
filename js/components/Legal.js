@@ -11,6 +11,7 @@ var {
   StyleSheet,
   Text,
   TouchableHighlight,
+  TextInput
 } = React;
 
 var Legal = React.createClass({
@@ -47,6 +48,20 @@ var Legal = React.createClass({
 
         <Text style={styles.legalCopy}>Do you agree to everything? If so please give us your email & hit accept.  Blood cats they'll tell you. Football helmet some indie record that's much cooler than. Mine nasty scar traffic lights brave and wild darling. I'm a nightmare dressed like a daydream Kanye big black cars. Fuck sewing machines operation hummingbird. Twin sized bed fades in time Country Music Hall of. Fame in the blink of an eye long list of. Ex-lovers rhode island gravity lose. It all even now banjo people say everybody. Loves pretty state of grace upstate my. Next mistake madison square I know places upstate cafe. Shellback dear John my ex-man.</Text>
         
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          onChangeText={(name) => this.setState({name})}
+          value={this.state.name}
+          enablesReturnKeyAutomatically={true}
+        />
+
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          onChangeText={(email) => this.setState({email})}
+          value={this.state.email}
+          enablesReturnKeyAutomatically={true}
+        />
+
         <View style={styles.buttons}>
           <TouchableHighlight onPress={this.handleAccept} underlayColor="transparent">
             <View style={styles.readyButton}>

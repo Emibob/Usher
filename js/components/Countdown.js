@@ -92,6 +92,7 @@ var styles = StyleSheet.create({
     color: 'white', 
     fontSize: 30,
     fontWeight: 'bold',
+    backgroundColor: 'transparent',
   },
   countdown: {
     alignItems: 'center',
