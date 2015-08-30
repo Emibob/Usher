@@ -5,7 +5,8 @@ var AppConstants = require('../constants/AppConstants'),
     AppAction = require('../actions/AppActions'),
     React = require('react-native'),
     ᐱ = require('../utils/Percent'),
-    Countdown = require('./Countdown');
+    Countdown = require('./Countdown'),
+    Copy = require('./Copy');
 
 var {
   View,
@@ -47,12 +48,6 @@ var Prompt = React.createClass({
       
       logo = <Image style={styles.logo} source={require('image!diamonLogo')} />;
       readyText = <Text style={styles.bringIt}>READY TO BRING IT?</Text>;
-      copy = (
-        <View style={{backgroundColor: 'transparent'}}>
-          <Text style={styles.promptTitle}>{this.state.promptTitle.toUpperCase()}</Text>
-          <Text style={styles.promptText}>{this.state.promptText.toUpperCase()}</Text>
-        </View>
-      );
       button = (
         <TouchableHighlight onPress={this.handleAppInit}>
           <View style={styles.readyButton}>
@@ -69,7 +64,7 @@ var Prompt = React.createClass({
         {countdown}
         {logo}
         {readyText}
-        {copy}
+        <Copy {...this.state} {...this.props} />
         
         <View style={styles.center}>
           {button}
@@ -84,6 +79,7 @@ var styles = StyleSheet.create({
   container: {
     backgroundColor: '#00eae7',
     height: AppConstants.HEIGHT,
+    width: AppConstants.WIDTH,
     flexDirection: 'column',
     justifyContent: 'center',
   },
@@ -113,33 +109,6 @@ var styles = StyleSheet.create({
     shadowOpacity: 1,
     backgroundColor: 'transparent',
     paddingLeft: ᐱ.percent.w(8),
-  },
-  promptTitle: {
-    color: 'white',
-    marginTop: 30,
-    fontSize: ᐱ.percent.h(3.9),
-    fontFamily: 'BrownStd-Bold',
-    shadowRadius: 0,
-    shadowOffset: {width: 2},
-    shadowColor: '#00eae7',
-    shadowOpacity: 1,
-    backgroundColor: 'transparent',
-    paddingLeft: ᐱ.percent.w(8),
-    paddingBottom: 0,
-  },
-  promptText: {
-    color: 'white',
-    fontSize: ᐱ.percent.h(2.7),
-    fontFamily: 'BrownStd-Bold',
-    shadowRadius: 0,
-    shadowOffset: {width: 2},
-    shadowColor: '#00eae7',
-    shadowOpacity: 1,
-    backgroundColor: 'transparent',
-    paddingLeft: ᐱ.percent.w(8),
-    paddingRight: ᐱ.percent.w(8),
-    paddingTop: 0,
-    marginBottom: ᐱ.percent.h(4),
   },
   readyButton: {
     width: AppConstants.WIDTH / 3,

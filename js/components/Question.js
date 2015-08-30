@@ -10,13 +10,16 @@ var AppConstants = require('../constants/AppConstants'),
     ᐱ = require('../utils/Percent'),
     UserStore = require('../stores/UserStore'),
     AppAction = require('../actions/AppActions'),
-    Countdown = require('./Countdown');
+    Countdown = require('./Countdown'),
+    Copy = require('./Copy'),
+    Legal = require('./Legal');
 
 var {
   View,
   Text,
   StyleSheet,
   TouchableHighlight,
+  Image,
 } = React;
 
 
@@ -31,12 +34,13 @@ var Question = React.createClass({
       file: null,
       recording: false,
       user: this.props.user,
+      legal: false,
     };
   },
   
   componentDidMount: function() {
     UserStore.addChangeListener(this._onChange);
-    //this.handleReady();
+    this.handleReady();
   },
 
   componentWillUnmount: function() {
@@ -61,46 +65,32 @@ var Question = React.createClass({
     setTimeout(this.pause, 5000);
   },
 
-  capture: function() {
-    this.refs.recorder.capture((err, url) => {
-      // Playing with the picture
-    });
-  },
-
   pause: function() {
     this.refs.recorder.pause();
     this.setState({recording: false});
-    //setTimeout(this.save, 2000);
     setTimeout(this.review, 2000);
   },
 
   review: function(){
-
     this.refs.recorder.save((err, url) => {
-      console.log(url);
-      
+
       this.setState({
         done: true,
         file: url
       });
+    });
+  },
 
+  keep: function(){
+    this.setState({
+      legal: true,
     });
   },
 
   save: function() {
-    var id = this.props.user.id;
+    var id = this.props.user.id; //TODO: attach to a user email?
 
     this.refs.recorder.save((err, url) => {
-      // Playing with the generated video
-
-      //console.log(url);
-      // this.setState({
-      //   done: true,
-      //   file: url
-      // });
-
-      //TODO: Might need to call an action that sets a timeout on the video playback
-      //so we can progress on to save/trash
 
       RNFS.readFile(url.split('file:///private')[1], false)
       .then(function(contents){
@@ -111,7 +101,7 @@ var Question = React.createClass({
           
           AssetData = Parse.Object.extend("Assets");
           NewAsset = new AssetData();
-          NewAsset.set("account_id", id);
+          NewAsset.set("account_id", id); //TODO: Change to Email?
           NewAsset.set("asset", parseFile);
           NewAsset.save({
             success: function(data){
@@ -143,7 +133,7 @@ var Question = React.createClass({
   },
 
   render: function() {
-    var component, button, countdown;
+    var component, button, countdown, copy, legal;
 
     //VIDEO
     if (this.state.done) {
@@ -159,24 +149,29 @@ var Question = React.createClass({
       component = <View />;
     }
 
-    //BUTTONS
-    if(this.state.done){
+    //BUTTONS & COPY
+    if(this.state.done){ //Video has been recorded & is playing back
       button = (
-        <View>
+        <View style={styles.row}>
         <TouchableHighlight onPress={this.resetUser} underlayColor="transparent">
-          <View style={styles.readyButton}>
-            <Text style={styles.readyText}>TRASH</Text>
+          <View style={[styles.readyButton, styles.rowButton]}>
+            <Text style={styles.readyText}>TRASH IT</Text>
           </View>
         </TouchableHighlight>
 
-        <TouchableHighlight onPress={this.save} underlayColor="transparent">
-          <View style={styles.readyButton}>
-            <Text style={styles.readyText}>SAVE</Text>
+        <TouchableHighlight onPress={this.keep} underlayColor="transparent">
+          <View style={[styles.readyButton, styles.rowButton]}>
+            <Text style={styles.readyText}>SAVE IT</Text>
           </View>
         </TouchableHighlight>
         </View>
       );
-    } else if(this.state.user.startRecord){
+      copy = (
+        <View style={styles.doneCopy}>
+          <Copy {...this.state} {...this.props} copy={"Yay, you did it! What do you want to do with the video?"}/>
+        </View>
+      );
+    } else if(this.state.user.startRecord){ //User has started recording video
       button = (
         <TouchableHighlight onPress={this.handleDone} underlayColor="transparent">
           <View style={styles.readyButton}>
@@ -184,13 +179,19 @@ var Question = React.createClass({
           </View>
         </TouchableHighlight>
       );
-    } else {
+      copy = (
+        <View style={styles.copy}>
+          <Copy {...this.state} {...this.props} />
+        </View>
+      );
+    } else { //Countdown is occuring before recording
       button = (
-        <TouchableHighlight onPress={this.handleReady} underlayColor="transparent">
-          <View style={styles.readyButton}>
-            <Text style={styles.readyText}>IM READY</Text>
-          </View>
-        </TouchableHighlight>
+        <View style={styles.none} />
+      );
+      copy = (
+        <View style={styles.copy}>
+          <Copy {...this.state} {...this.props} />
+        </View>
       );
     }
 
@@ -199,17 +200,28 @@ var Question = React.createClass({
       countdown = (
         <View style={styles.countdown}>
           <View style={styles.cameraFilter} />
-          <Countdown {...this.state} {...this.props}/>
+          <Countdown {...this.state} {...this.props} />
         </View>
       );
     } else {
-      countdown = <View style={styles.none}/>
+      countdown = <View style={styles.none} />
+    }
+
+    //LEGAL 
+    if (this.state.legal) {
+      legal = ( 
+        <View style={styles.legal}>
+          <Legal {...this.state} {...this.props} />
+        </View>);
+    } else {
+      legal = <View style={styles.none} />;
     }
 
 
     return (
       <View style={styles.container}>
-        
+      <Image style={styles.pattern} source={require('image!pattern')} />
+
         <View style={styles.recorder}>
           <Recorder
             ref="recorder"
@@ -221,8 +233,11 @@ var Question = React.createClass({
         </View>
 
           {component}
-          
+
+          {copy}
           {button}
+
+          {legal}
       </View>
     );
   },
@@ -231,6 +246,22 @@ var Question = React.createClass({
 module.exports = Question;
 
 var styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#00eae7',
+    flex: 1,
+    height: ᐱ.percent.h(100),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pattern:{
+    width: ᐱ.percent.w(150),
+    height: ᐱ.percent.h(70),
+    marginTop: ᐱ.percent.h(-20),
+    marginLeft: ᐱ.percent.w(-20),
+    position: 'absolute',
+    transform: [{rotate: '20deg'}],
+    opacity: 0.3,
+  },
   camera: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -281,22 +312,36 @@ var styles = StyleSheet.create({
     marginLeft: ᐱ.percent.w(3),
     backgroundColor: 'transparent',
   },
-  container: {
-    backgroundColor: '#00eae7',
-    flex: 1,
-    height: ᐱ.percent.h(100),
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   none: {
     width: 0,
     height: 0,
+  },
+  copy: {
+    backgroundColor: 'transparent',
+    width: ᐱ.percent.w(100)
+  },
+  legal: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
+  row: {
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+  },
+  rowButton: {
+    margin: 12,
+  },
+  doneCopy: {
+    marginTop: ᐱ.percent.h(3),
+    backgroundColor: 'transparent',
   }
 });
 
 var config = {
   autoSetVideoOrientation: false,
-
   video: {
     enabled: true,
     bitrate: 1800000, // 2Mbit/s
