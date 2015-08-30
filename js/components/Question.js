@@ -35,6 +35,7 @@ var Question = React.createClass({
       recording: false,
       user: this.props.user,
       legal: false,
+      saveInProgress: false,
     };
   },
   
@@ -54,6 +55,11 @@ var Question = React.createClass({
 
     if(this.state.user.startRecord && !this.state.user.recordInProgress){
       this.record();
+    }
+
+    //BUG: Called twice...
+    if(this.state.user.info && !this.state.saveInProgress){
+      this.save();
     }
   },
 
@@ -88,7 +94,15 @@ var Question = React.createClass({
   },
 
   save: function() {
-    var id = this.props.user.id; //TODO: attach to a user email?
+    this.setState({
+      saveInProgress: true,
+    });
+
+    //USER EMAIL: this.state.user.info.email
+    //USER NAME: this.state.user.info.name
+
+    var id = this.props.user.id; //TODO: Remove?
+    var goToDone = this.goToDone;
 
     this.refs.recorder.save((err, url) => {
 
@@ -105,6 +119,7 @@ var Question = React.createClass({
           NewAsset.set("asset", parseFile);
           NewAsset.save({
             success: function(data){
+              goToDone();
               console.log('SUCCESS');
             },
             error: function(data){
@@ -118,6 +133,15 @@ var Question = React.createClass({
         });
       });
     });
+
+    //this.goToDone(); //set VideoSaved & go to Done screen
+  },
+
+  goToDone: function(){
+    if(!this.state.user.videoIsSaved){
+      console.log('goToDone is called!!!!!');
+      AppAction.VideoIsSaved(true);
+    }
   },
 
   handleReady: function(){
@@ -209,7 +233,7 @@ var Question = React.createClass({
 
     //LEGAL 
     if (this.state.legal) {
-      legal = ( 
+      legal = (
         <View style={styles.legal}>
           <Legal {...this.state} {...this.props} />
         </View>);

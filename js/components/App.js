@@ -5,6 +5,7 @@ var AppConstants = require('../constants/AppConstants'),
     Question = require('../components/Question'),
     Prompt = require('../components/Prompt'),
     Error = require('../components/Error'),
+    Done = require('../components/Done'),
     React = require('react-native'),
     _ = require('lodash');
 
@@ -42,10 +43,14 @@ var App = React.createClass({
   render: function() {
     var component;
 
+    console.log('this.state.user.videoIsSaved', this.state.user.videoIsSaved);
+
     if(this.state.user.init){
       component = <Question {...this.state} {...this.props} />;
+    } else if (this.state.user.videoIsSaved) {
+      component = <Done {...this.state} {...this.props} />;
     } else {
-      component = <Prompt {...this.state} {...this.props} />
+      component = <Prompt {...this.state} {...this.props} />;
     }
 
     return(

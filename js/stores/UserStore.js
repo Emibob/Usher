@@ -79,6 +79,26 @@ function handleUserReset(){
   UserStore.emitChange();
 }
 
+/**
+ * handleSaveUserInfo()
+ * @param  {userInfo} email, name
+ */
+
+function handleSaveUserInfo(userInfo){
+  _user.info = {email: userInfo.email, name: userInfo.name};
+  UserStore.emitChange();
+}
+
+/**
+ * handleVideoIsSaved()
+ * @param  {bool} true
+ */
+
+function handleVideoIsSaved(bool){
+  _user.videoIsSaved = bool;
+  UserStore.emitChange();
+}
+
 
 
 var UserStore = _.extend({}, EventEmitter.prototype, {
@@ -133,6 +153,16 @@ AppDispatcher.register(function(action) {
       handleUserReset();
       UserStore.emitChange();
       break;
+    case AppConstants.ActionTypes.VIDEO_IS_SAVED:
+      console.log('VIDEO_IS_SAVED');
+      handleVideoIsSaved(action.videoIsSaved);
+      UserStore.emitChange();
+      break;
+    case AppConstants.ActionTypes.SAVE_USER_INFO:
+      handleSaveUserInfo(action.userInfo);
+      UserStore.emitChange();
+      break;
+    
 
     default:
       // no op
