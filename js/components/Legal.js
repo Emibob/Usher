@@ -20,6 +20,7 @@ var Legal = React.createClass({
       start: false,
       user: UserStore.get(),
       bumpedUp: 0,
+      loading: false,
     };
   },
 
@@ -36,6 +37,14 @@ var Legal = React.createClass({
   },
 
   handleAccept: function(){
+
+    this.refs.name.blur();
+    this.refs.email.blur();
+
+    this.setState({
+      loading: true,
+    });
+
     AppActions.saveUserInfo({
       email: this.state.email,
       name: this.state.name
@@ -55,8 +64,10 @@ var Legal = React.createClass({
   render: function() {
     var legalCopy;
 
-    if(this.state.bumpedUp) {
+    if (this.state.bumpedUp && !this.state.loading) {
       legalCopy = <View style={styles.halfScreen} />
+    } else if (this.state.loading) {
+      legalCopy = <Text style={styles.legalCopy}>Loading...</Text>
     } else {
       legalCopy = <Text style={styles.legalCopy}>Do you agree to everything? If so please give us your email & hit accept.  Blood cats theyll tell you. Football helmet some indie record thats much cooler than. Mine nasty scar traffic lights brave and wild darling. Im a nightmare dressed like a daydream Kanye big black cars. Fuck sewing machines operation hummingbird. Twin sized bed fades in time Country Music Hall of. Fame in the blink of an eye long list of. Ex-lovers rhode island gravity lose. It all even now banjo people say everybody. Loves pretty state of grace upstate my. Next mistake madison square I know places upstate cafe. Shellback dear John my ex-man.</Text>;
     }
@@ -67,6 +78,7 @@ var Legal = React.createClass({
       {legalCopy}
         
         <TextInput
+          ref="name"
           style={styles.inputs}
           onChangeText={(name) => this.setState({name})}
           value={this.state.name}
@@ -78,6 +90,7 @@ var Legal = React.createClass({
         />
 
         <TextInput
+          ref="email"
           style={styles.inputs}
           onChangeText={(email) => this.setState({email})}
           value={this.state.email}
