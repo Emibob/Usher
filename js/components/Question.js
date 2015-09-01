@@ -10,7 +10,6 @@ var AppConstants = require('../constants/AppConstants'),
     ᐱ = require('../utils/Percent'),
     SetIntervalMixin = require('../mixins/SetIntervalMixin'),
     UserStore = require('../stores/UserStore'),
-    AppAction = require('../actions/AppActions'),
     Countdown = require('./Countdown'),
     Copy = require('./Copy'),
     Legal = require('./Legal');
@@ -23,8 +22,8 @@ var {
   Image,
 } = React;
 
-// Change this to make the recording time longer or shorter
 var secondsRemaining = 5;
+var videoTimeout;
 
 Parse.initialize("XR6QEwB3uUOhxCCT1jGigHQc9YO1vQHceRjrwAgN", "oGY2hPgTLoJJACeuV3CJTihOMDlmE04UCUqq0ABb");
 
@@ -44,6 +43,7 @@ var Question = React.createClass({
       showTimeRemaining: true,
       remainingText: `You'll have ${secondsRemaining} seconds`,
       remainingWidth: AppConstants.WIDTH,
+      saveInProgress: false,
     };
   },
 
@@ -77,10 +77,14 @@ var Question = React.createClass({
     if(this.state.user.startRecord && !this.state.user.recordInProgress){
       this.record();
     }
+
+    if(this.state.user.info && !this.state.saveInProgress){
+      this.save();
+    }
   },
 
   record: function() {
-    AppAction.setRecordInProgress(); //Don't let it record again
+    AppActions.setRecordInProgress(); //Don't let it record again
 
     this.refs.recorder.record();
     this.setState({
@@ -115,12 +119,21 @@ var Question = React.createClass({
   },
 
   save: function() {
-    var id = this.props.user.id; //TODO: attach to a user email?
+    this.setState({
+      saveInProgress: true,
+    });
+
+    //USER EMAIL: this.state.user.info.email
+    //USER NAME: this.state.user.info.name
+
+    var id = this.props.user.id; //TODO: Remove?
+    var goToDone = this.goToDone;
 
     this.refs.recorder.save((err, url) => {
 
       RNFS.readFile(url.split('file:///private')[1], false)
       .then(function(contents){
+
         var parseFile, NewAsset, AssetData;
 
         parseFile = new Parse.File('video.mp4', {base64: contents});
@@ -132,6 +145,7 @@ var Question = React.createClass({
           NewAsset.set("asset", parseFile);
           NewAsset.save({
             success: function(data){
+              goToDone();
               console.log('SUCCESS');
             },
             error: function(data){
@@ -145,18 +159,28 @@ var Question = React.createClass({
         });
       });
     });
+
+    this.refs.recorder.removeAllSegments();
+  },
+
+  goToDone: function(){
+    if(!this.state.user.videoIsSaved){
+      AppActions.VideoIsSaved(true);
+    }
   },
 
   handleReady: function(){
-    AppAction.userReady(true);
+    AppActions.userReady(true);
   },
 
   handleDone: function(){
+    clearTimeout(videoTimeout);
     this.pause();
   },
 
   resetUser: function(){
-    AppAction.userReset();
+    this.refs.recorder.removeAllSegments();
+    AppActions.userReset();
   },
 
   render: function() {
