@@ -135,7 +135,7 @@ var Question = React.createClass({
       });
     });
 
-    //this.refs.recorder.removeAllSegments();
+    this.refs.recorder.removeAllSegments();
   },
 
   goToDone: function(){
