@@ -8,6 +8,7 @@ var AppConstants = require('../constants/AppConstants'),
     Parse = require('parse').Parse,
     Video = require('react-native-video'),
     ᐱ = require('../utils/Percent'),
+    SetIntervalMixin = require('../mixins/SetIntervalMixin'),
     UserStore = require('../stores/UserStore'),
     AppAction = require('../actions/AppActions'),
     Countdown = require('./Countdown'),
@@ -22,11 +23,14 @@ var {
   Image,
 } = React;
 
+// Change this to make the recording time longer or shorter
+var secondsRemaining = 5;
 
 Parse.initialize("XR6QEwB3uUOhxCCT1jGigHQc9YO1vQHceRjrwAgN", "oGY2hPgTLoJJACeuV3CJTihOMDlmE04UCUqq0ABb");
 
 
 var Question = React.createClass({
+  mixins: [SetIntervalMixin],
 
   getInitialState: function() {
     return {
@@ -35,9 +39,14 @@ var Question = React.createClass({
       recording: false,
       user: this.props.user,
       legal: false,
+      videoTime: 5000,
+      secondsRemaining: secondsRemaining,
+      showTimeRemaining: true,
+      remainingText: `You'll have ${secondsRemaining} seconds`,
+      remainingWidth: AppConstants.WIDTH,
     };
   },
-  
+
   componentDidMount: function() {
     UserStore.addChangeListener(this._onChange);
     this.handleReady();
@@ -45,6 +54,19 @@ var Question = React.createClass({
 
   componentWillUnmount: function() {
     UserStore.removeChangeListener(this._onChange);
+  },
+
+  tick: function() {
+    var w = (this.state.secondsRemaining - 1) / secondsRemaining * AppConstants.WIDTH;
+
+    if ( w <= 0 ) {
+      this.setState({remainingText: "Done"});
+    }
+
+    this.setState({ secondsRemaining: this.state.secondsRemaining - 1, remainingWidth: w });
+    if( this.state.secondsRemaining <= 0 ) {
+      this.setState({showTimeRemaining: false});
+    }
   },
 
   _onChange: function() {
@@ -61,8 +83,13 @@ var Question = React.createClass({
     AppAction.setRecordInProgress(); //Don't let it record again
 
     this.refs.recorder.record();
-    this.setState({recording: true});
+    this.setState({
+      recording: true,
+      remainingText: ' seconds left',
+    });
     setTimeout(this.pause, 5000);
+
+    this.setInterval(this.tick, 1000);
   },
 
   pause: function() {
@@ -98,7 +125,7 @@ var Question = React.createClass({
 
         parseFile = new Parse.File('video.mp4', {base64: contents});
         parseFile.save().then(function(data){
-          
+
           AssetData = Parse.Object.extend("Assets");
           NewAsset = new AssetData();
           NewAsset.set("account_id", id); //TODO: Change to Email?
@@ -133,7 +160,7 @@ var Question = React.createClass({
   },
 
   render: function() {
-    var component, button, countdown, copy, legal;
+    var component, button, countdown, copy, legal, remaining;
 
     //VIDEO
     if (this.state.done) {
@@ -150,7 +177,7 @@ var Question = React.createClass({
     }
 
     //BUTTONS & COPY
-    if(this.state.done){ //Video has been recorded & is playing back
+    if(this.state.done) { //Video has been recorded & is playing back
       button = (
         <View style={styles.row}>
         <TouchableHighlight onPress={this.resetUser} underlayColor="transparent">
@@ -207,14 +234,31 @@ var Question = React.createClass({
       countdown = <View style={styles.none} />
     }
 
-    //LEGAL 
+    //LEGAL
     if (this.state.legal) {
-      legal = ( 
+      legal = (
         <View style={styles.legal}>
           <Legal {...this.state} {...this.props} />
         </View>);
     } else {
       legal = <View style={styles.none} />;
+    }
+
+    //TIME REMAINING
+    if (this.state.showTimeRemaining) {
+      var secs = this.state.recording === true?  this.state.secondsRemaining : '';
+      remaining = (
+        <View style={styles.remainingContainer}>
+          <Text style={[styles.remainingCount, styles.remainingUnderneath]}>{secs}{this.state.remainingText}</Text>
+          <View style={[styles.remainingBar, {width: this.state.remainingWidth}]}>
+            <View style={styles.remainingBarTextWrap}>
+            <Text style={styles.remainingCount}>{secs}{this.state.remainingText}</Text>
+            </View>
+          </View>
+        </View>
+      );
+    } else {
+      remaining = <View />;
     }
 
 
@@ -238,6 +282,7 @@ var Question = React.createClass({
           {button}
 
           {legal}
+          {remaining}
       </View>
     );
   },
@@ -270,6 +315,7 @@ var styles = StyleSheet.create({
     backgroundColor:'transparent',
   },
   countdown: {
+    backgroundColor: 'transparent',
     position: 'absolute',
     marginTop: ᐱ.percent.w(-60),
   },
@@ -340,6 +386,36 @@ var styles = StyleSheet.create({
   doneCopy: {
     marginTop: ᐱ.percent.h(3),
     backgroundColor: 'transparent',
+  },
+  remainingContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: AppConstants.WIDTH,
+    height: 100,
+    backgroundColor: '#FFFF5A',
+  },
+  remainingBar: {
+    backgroundColor: '#DD4199',
+    height: 100,
+    width: AppConstants.WIDTH / 2,
+    overflow: 'hidden',
+
+  },
+  remainingBarTextWrap: {
+    width: AppConstants.WIDTH,
+    overflow: 'hidden',
+    height: 100,
+  },
+  remainingCount: {
+    color: '#ffffff',
+    fontSize: 36,
+    position: 'absolute',
+    top: 25,
+    left: 10,
+  },
+  remainingUnderneath: {
+    color: '#DD4199',
   }
 });
 
@@ -361,6 +437,6 @@ var config = {
     channelsCount: 1, // Mono output
     format: "MPEG4AAC",
     quality: "HighestQuality" // HighestQuality || MediumQuality || LowQuality
-  }
+  },
 };
 
