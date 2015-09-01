@@ -22,7 +22,6 @@ var Done = React.createClass({
   },
 
   render: function() {
-  	console.log('this.refs', this.refs);
     return(
       <View style={styles.container}>
         <Text style={styles.thanks}>Thanks for participating!</Text>

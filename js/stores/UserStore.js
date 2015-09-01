@@ -19,7 +19,6 @@ var _user = {
  * @param  {bool}
  */
 function handleInitApp() {
-  console.log('handleInitApp is called');
   _user.init = true;
   UserStore.emitChange();
 }
