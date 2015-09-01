@@ -17,5 +17,7 @@ module.exports = {
     RECORD_IN_PROGRESS: null,
     USER_RESET: null,
     INIT_APP: null,
+    SAVE_USER_INFO: null,
+    VIDEO_IS_SAVED: null,
   }),
 };

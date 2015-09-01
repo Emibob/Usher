@@ -11,7 +11,7 @@ var {
   StyleSheet,
   Text,
   TouchableHighlight,
-  TextInput
+  TextInput,
 } = React;
 
 var Legal = React.createClass({
@@ -19,6 +19,8 @@ var Legal = React.createClass({
     return {
       start: false,
       user: UserStore.get(),
+      bumpedUp: 0,
+      loading: false,
     };
   },
 
@@ -35,31 +37,68 @@ var Legal = React.createClass({
   },
 
   handleAccept: function(){
-    console.log('grab the email and associate it to the user & remove legal component');
+
+    this.refs.name.blur();
+    this.refs.email.blur();
+
+    this.setState({
+      loading: true,
+    });
+
+    AppActions.saveUserInfo({
+      email: this.state.email,
+      name: this.state.name
+    });
   },
 
   handleCancel: function() {
     AppActions.userReset();
   },
 
+  shiftFocus: function() {
+    this.setState({
+      bumpedUp: 1,
+    });
+  },
+
   render: function() {
+    var legalCopy;
+
+    if (this.state.bumpedUp && !this.state.loading) {
+      legalCopy = <View style={styles.halfScreen} />
+    } else if (this.state.loading) {
+      legalCopy = <Text style={styles.legalCopy}>Loading...</Text>
+    } else {
+      legalCopy = <Text style={styles.legalCopy}>Do you agree to everything? If so please give us your email & hit accept.  Blood cats theyll tell you. Football helmet some indie record thats much cooler than. Mine nasty scar traffic lights brave and wild darling. Im a nightmare dressed like a daydream Kanye big black cars. Fuck sewing machines operation hummingbird. Twin sized bed fades in time Country Music Hall of. Fame in the blink of an eye long list of. Ex-lovers rhode island gravity lose. It all even now banjo people say everybody. Loves pretty state of grace upstate my. Next mistake madison square I know places upstate cafe. Shellback dear John my ex-man.</Text>;
+    }
+
     return(
       <View style={styles.container}>
 
-        <Text style={styles.legalCopy}>Do you agree to everything? If so please give us your email & hit accept.  Blood cats they'll tell you. Football helmet some indie record that's much cooler than. Mine nasty scar traffic lights brave and wild darling. I'm a nightmare dressed like a daydream Kanye big black cars. Fuck sewing machines operation hummingbird. Twin sized bed fades in time Country Music Hall of. Fame in the blink of an eye long list of. Ex-lovers rhode island gravity lose. It all even now banjo people say everybody. Loves pretty state of grace upstate my. Next mistake madison square I know places upstate cafe. Shellback dear John my ex-man.</Text>
+      {legalCopy}
         
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          ref="name"
+          style={styles.inputs}
           onChangeText={(name) => this.setState({name})}
           value={this.state.name}
+          onFocus={this.shiftFocus}
           enablesReturnKeyAutomatically={true}
+          autoCorrect={true}
+          defaultValue={"Name"}
+          clearTextOnFocus={true}
         />
 
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          ref="email"
+          style={styles.inputs}
           onChangeText={(email) => this.setState({email})}
           value={this.state.email}
+          onFocus={this.test}
           enablesReturnKeyAutomatically={true}
+          autoCorrect={true}
+          defaultValue={"Email"}
+          clearTextOnFocus={true}
         />
 
         <View style={styles.buttons}>
@@ -131,5 +170,16 @@ var styles = StyleSheet.create({
     marginLeft: ᐱ.percent.w(3),
     backgroundColor: 'transparent',
   },
+  inputs: {
+    height: 40,
+    borderColor: 'white',
+    borderWidth: 1,
+    margin: 10,
+    color: 'white',
+    padding: 4,
+  },
+  halfScreen: {
+    flex: 0.5,
+  }
 });
 

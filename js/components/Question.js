@@ -9,7 +9,6 @@ var AppConstants = require('../constants/AppConstants'),
     Video = require('react-native-video'),
     ᐱ = require('../utils/Percent'),
     UserStore = require('../stores/UserStore'),
-    AppAction = require('../actions/AppActions'),
     Countdown = require('./Countdown'),
     Copy = require('./Copy'),
     Legal = require('./Legal');
@@ -22,6 +21,7 @@ var {
   Image,
 } = React;
 
+var videoTimeout;
 
 Parse.initialize("XR6QEwB3uUOhxCCT1jGigHQc9YO1vQHceRjrwAgN", "oGY2hPgTLoJJACeuV3CJTihOMDlmE04UCUqq0ABb");
 
@@ -35,6 +35,7 @@ var Question = React.createClass({
       recording: false,
       user: this.props.user,
       legal: false,
+      saveInProgress: false,
     };
   },
   
@@ -55,14 +56,19 @@ var Question = React.createClass({
     if(this.state.user.startRecord && !this.state.user.recordInProgress){
       this.record();
     }
+
+    if(this.state.user.info && !this.state.saveInProgress){
+      this.save();
+    }
   },
 
   record: function() {
-    AppAction.setRecordInProgress(); //Don't let it record again
+    AppActions.setRecordInProgress(); //Don't let it record again
 
     this.refs.recorder.record();
     this.setState({recording: true});
-    setTimeout(this.pause, 5000);
+    
+    videoTimeout = setTimeout(this.pause, 5000);
   },
 
   pause: function() {
@@ -88,12 +94,21 @@ var Question = React.createClass({
   },
 
   save: function() {
-    var id = this.props.user.id; //TODO: attach to a user email?
+    this.setState({
+      saveInProgress: true,
+    });
+
+    //USER EMAIL: this.state.user.info.email
+    //USER NAME: this.state.user.info.name
+
+    var id = this.props.user.id; //TODO: Remove?
+    var goToDone = this.goToDone;
 
     this.refs.recorder.save((err, url) => {
 
       RNFS.readFile(url.split('file:///private')[1], false)
       .then(function(contents){
+
         var parseFile, NewAsset, AssetData;
 
         parseFile = new Parse.File('video.mp4', {base64: contents});
@@ -105,6 +120,7 @@ var Question = React.createClass({
           NewAsset.set("asset", parseFile);
           NewAsset.save({
             success: function(data){
+              goToDone();
               console.log('SUCCESS');
             },
             error: function(data){
@@ -118,18 +134,28 @@ var Question = React.createClass({
         });
       });
     });
+
+    this.refs.recorder.removeAllSegments();
+  },
+
+  goToDone: function(){
+    if(!this.state.user.videoIsSaved){
+      AppActions.VideoIsSaved(true);
+    }
   },
 
   handleReady: function(){
-    AppAction.userReady(true);
+    AppActions.userReady(true);
   },
 
   handleDone: function(){
+    clearTimeout(videoTimeout);
     this.pause();
   },
 
   resetUser: function(){
-    AppAction.userReset();
+    this.refs.recorder.removeAllSegments();
+    AppActions.userReset();
   },
 
   render: function() {
@@ -209,7 +235,7 @@ var Question = React.createClass({
 
     //LEGAL 
     if (this.state.legal) {
-      legal = ( 
+      legal = (
         <View style={styles.legal}>
           <Legal {...this.state} {...this.props} />
         </View>);
