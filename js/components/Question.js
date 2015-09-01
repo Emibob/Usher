@@ -9,7 +9,6 @@ var AppConstants = require('../constants/AppConstants'),
     Video = require('react-native-video'),
     ᐱ = require('../utils/Percent'),
     UserStore = require('../stores/UserStore'),
-    AppAction = require('../actions/AppActions'),
     Countdown = require('./Countdown'),
     Copy = require('./Copy'),
     Legal = require('./Legal');
@@ -22,6 +21,7 @@ var {
   Image,
 } = React;
 
+var videoTimeout;
 
 Parse.initialize("XR6QEwB3uUOhxCCT1jGigHQc9YO1vQHceRjrwAgN", "oGY2hPgTLoJJACeuV3CJTihOMDlmE04UCUqq0ABb");
 
@@ -57,18 +57,18 @@ var Question = React.createClass({
       this.record();
     }
 
-    //BUG: Called twice...
     if(this.state.user.info && !this.state.saveInProgress){
       this.save();
     }
   },
 
   record: function() {
-    AppAction.setRecordInProgress(); //Don't let it record again
+    AppActions.setRecordInProgress(); //Don't let it record again
 
     this.refs.recorder.record();
     this.setState({recording: true});
-    setTimeout(this.pause, 5000);
+    
+    videoTimeout = setTimeout(this.pause, 5000);
   },
 
   pause: function() {
@@ -108,6 +108,7 @@ var Question = React.createClass({
 
       RNFS.readFile(url.split('file:///private')[1], false)
       .then(function(contents){
+
         var parseFile, NewAsset, AssetData;
 
         parseFile = new Parse.File('video.mp4', {base64: contents});
@@ -134,26 +135,27 @@ var Question = React.createClass({
       });
     });
 
-    //this.goToDone(); //set VideoSaved & go to Done screen
+    //this.refs.recorder.removeAllSegments();
   },
 
   goToDone: function(){
     if(!this.state.user.videoIsSaved){
-      console.log('goToDone is called!!!!!');
-      AppAction.VideoIsSaved(true);
+      AppActions.VideoIsSaved(true);
     }
   },
 
   handleReady: function(){
-    AppAction.userReady(true);
+    AppActions.userReady(true);
   },
 
   handleDone: function(){
+    clearTimeout(videoTimeout);
     this.pause();
   },
 
   resetUser: function(){
-    AppAction.userReset();
+    this.refs.recorder.removeAllSegments();
+    AppActions.userReset();
   },
 
   render: function() {

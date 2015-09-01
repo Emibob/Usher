@@ -38,7 +38,6 @@ var AppActions = {
     });
   },
   VideoIsSaved: function(bool){
-    console.log('VideoIsSaved in AppApplication');
     AppDispatcher.dispatch({
       actionType: AppConstants.ActionTypes.VIDEO_IS_SAVED,
       videoIsSaved: bool,

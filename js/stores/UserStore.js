@@ -154,7 +154,6 @@ AppDispatcher.register(function(action) {
       UserStore.emitChange();
       break;
     case AppConstants.ActionTypes.VIDEO_IS_SAVED:
-      console.log('VIDEO_IS_SAVED');
       handleVideoIsSaved(action.videoIsSaved);
       UserStore.emitChange();
       break;
