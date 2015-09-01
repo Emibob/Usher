@@ -191,17 +191,17 @@ var Question = React.createClass({
       component = (<Video source={{uri: this.state.file}} // Can be a URL or a local file.
        rate={1.0}                   // 0 is paused, 1 is normal.
        volume={1.0}                 // 0 is muted, 1 is normal.
-       muted={false}                // Mutes the audio entirely.
+       muted={true}                // Mutes the audio entirely.
        paused={false}               // Pauses playback entirely.
        resizeMode="cover"           // Fill the whole screen at aspect ratio.
-       repeat={false}                // Repeat forever.
+       repeat={true}                // Repeat forever.
        style={styles.playVideo} />);
     } else {
       component = <View />;
     }
 
     //BUTTONS & COPY
-    if(this.state.done) { //Video has been recorded & is playing back
+    if(this.state.remainingText === "Done") { //Video has been recorded & is playing back
       button = (
         <View style={styles.row}>
         <TouchableHighlight onPress={this.resetUser} underlayColor="transparent">
@@ -246,7 +246,7 @@ var Question = React.createClass({
       );
     }
 
-    //COUNTDOWN TODO: Countdown transparent background isn't happening...
+    //COUNTDOWN
     if(this.state.user.ready) {
       countdown = (
         <View style={styles.countdown}>
@@ -334,8 +334,9 @@ var styles = StyleSheet.create({
   camera: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: ᐱ.percent.w(60),
-    width: ᐱ.percent.w(60),
+    width: 460,
+    height: 460,
+    flex: 1,
     backgroundColor:'transparent',
   },
   countdown: {
@@ -450,15 +451,12 @@ var config = {
     bitrate: 1800000, // 2Mbit/s
     timescale: 1, // Higher than 1 makes a slow motion, between 0 and 1 makes a timelapse effect
     format: "MPEG4",
-    quality: "MediumQuality", // HighestQuality || MediumQuality || LowQuality
-    filters: [
-      {"CIfilter":"CIColorInvert"}
-    ]
+    quality: "HighestQuality" // HighestQuality || MediumQuality || LowQuality
   },
   audio: {
     enabled: true,
     bitrate: 128000, // 128kbit/s
-    channelsCount: 1, // Mono output
+    channelsCount: 2, // Mono output
     format: "MPEG4AAC",
     quality: "HighestQuality" // HighestQuality || MediumQuality || LowQuality
   },
