@@ -21,6 +21,7 @@ var Legal = React.createClass({
       user: UserStore.get(),
       bumpedUp: 0,
       loading: false,
+      error: false,
     };
   },
 
@@ -36,19 +37,29 @@ var Legal = React.createClass({
     this.setState({user: UserStore.get()});
   },
 
-  handleAccept: function(){
+  handleAccept: function() {
 
     this.refs.name.blur();
     this.refs.email.blur();
 
-    this.setState({
-      loading: true,
-    });
+    var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    
+    if(emailRegex.test(this.state.email)) {
+      this.setState({
+        loading: true,
+        error: false,
+      });
 
-    AppActions.saveUserInfo({
-      email: this.state.email,
-      name: this.state.name
-    });
+      AppActions.saveUserInfo({
+        email: this.state.email,
+        name: this.state.name
+      });
+    } else {
+      console.log('setting the error');
+      this.setState({
+        error: "Please enter a valid email address",
+      });
+    }
   },
 
   handleCancel: function() {
@@ -64,10 +75,12 @@ var Legal = React.createClass({
   render: function() {
     var legalCopy;
 
-    if (this.state.bumpedUp && !this.state.loading) {
+    if (this.state.bumpedUp && !this.state.loading && !this.state.error) {
       legalCopy = <View style={styles.halfScreen} />
     } else if (this.state.loading) {
-      legalCopy = <Text style={styles.legalCopy}>Loading...</Text>
+      legalCopy = <Text style={styles.halfScreen}>Loading...</Text>
+    } else if (this.state.error) {
+      legalCopy = <Text style={styles.halfScreen}>{this.state.error}</Text>
     } else {
       legalCopy = <Text style={styles.legalCopy}>Do you agree to everything? If so please give us your email & hit accept.  Blood cats theyll tell you. Football helmet some indie record thats much cooler than. Mine nasty scar traffic lights brave and wild darling. Im a nightmare dressed like a daydream Kanye big black cars. Fuck sewing machines operation hummingbird. Twin sized bed fades in time Country Music Hall of. Fame in the blink of an eye long list of. Ex-lovers rhode island gravity lose. It all even now banjo people say everybody. Loves pretty state of grace upstate my. Next mistake madison square I know places upstate cafe. Shellback dear John my ex-man.</Text>;
     }
@@ -94,7 +107,7 @@ var Legal = React.createClass({
           style={styles.inputs}
           onChangeText={(email) => this.setState({email})}
           value={this.state.email}
-          onFocus={this.test}
+          onFocus={this.shiftFocus}
           enablesReturnKeyAutomatically={true}
           autoCorrect={true}
           defaultValue={"Email"}
