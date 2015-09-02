@@ -12,12 +12,19 @@ var {
   TouchableHighlight,
 } = React;
 
+var doneTimeout;
+
 var Done = React.createClass({
   getInitialState: function() {
     return {};
   },
 
+  componentDidMount: function() {
+    doneTimeout = setTimeout(this.handleDone, 2000);
+  },
+
   handleDone: function(){
+    clearTimeout(doneTimeout);
   	AppActions.userReset();
   },
 
