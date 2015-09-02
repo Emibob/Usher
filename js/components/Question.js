@@ -91,7 +91,7 @@ var Question = React.createClass({
       recording: true,
       remainingText: ' seconds left',
     });
-    setTimeout(this.pause, 5000);
+    videoTimeout = setTimeout(this.pause, 5000);
 
     this.setInterval(this.tick, 1000);
   },
@@ -176,6 +176,7 @@ var Question = React.createClass({
   handleDone: function(){
     clearTimeout(videoTimeout);
     this.pause();
+    this.setState({showTimeRemaining: false});
   },
 
   resetUser: function(){
@@ -201,7 +202,7 @@ var Question = React.createClass({
     }
 
     //BUTTONS & COPY
-    if(this.state.remainingText === "Done") { //Video has been recorded & is playing back
+    if(this.state.done) { //Video has been recorded & is playing back
       button = (
         <View style={styles.row}>
         <TouchableHighlight onPress={this.resetUser} underlayColor="transparent">
