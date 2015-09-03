@@ -4,6 +4,7 @@ var AppConstants = require('../constants/AppConstants'),
     AppActions = require('../actions/AppActions'),
     React = require('react-native'),
     Recorder  = require('react-native-screcorder'),
+    Camera = require('react-native-camera'),
     RNFS = require('react-native-fs'),
     Parse = require('parse').Parse,
     Video = require('react-native-video'),
@@ -44,6 +45,9 @@ var Question = React.createClass({
       remainingText: `You'll have ${secondsRemaining} seconds`,
       remainingWidth: AppConstants.WIDTH,
       saveInProgress: false,
+      cameraType: Camera.constants.Type.front,
+      captureMode: Camera.constants.CaptureMode.video,
+      captureTarget: Camera.constants.CaptureTarget.cameraRoll,
     };
   },
 
@@ -86,7 +90,7 @@ var Question = React.createClass({
   record: function() {
     AppActions.setRecordInProgress(); //Don't let it record again
 
-    this.refs.recorder.record();
+    // this.refs.recorder.record();
     this.setState({
       recording: true,
       remainingText: ' seconds left',
@@ -97,13 +101,14 @@ var Question = React.createClass({
   },
 
   pause: function() {
-    this.refs.recorder.pause();
+    // this.refs.recorder.pause();
+    this.refs.recorder.stopCapture();
     this.setState({recording: false});
     setTimeout(this.review, 2000);
   },
 
   review: function(){
-    this.refs.recorder.save((err, url) => {
+    this.refs.recorder.capture((err, url) => {
 
       this.setState({
         done: true,
@@ -129,7 +134,7 @@ var Question = React.createClass({
     var id = this.props.user.id; //TODO: Remove?
     var goToDone = this.goToDone;
 
-    this.refs.recorder.save((err, url) => {
+    this.refs.recorder.capture((err, url) => {
 
       RNFS.readFile(url.split('file:///private')[1], false)
       .then(function(contents){
@@ -160,7 +165,7 @@ var Question = React.createClass({
       });
     });
 
-    this.refs.recorder.removeAllSegments();
+   // this.refs.recorder.removeAllSegments();
   },
 
   goToDone: function(){
@@ -180,7 +185,7 @@ var Question = React.createClass({
   },
 
   resetUser: function(){
-    this.refs.recorder.removeAllSegments();
+   // this.refs.recorder.removeAllSegments();
     AppActions.userReset();
   },
 
@@ -291,13 +296,13 @@ var Question = React.createClass({
       <View style={styles.container}>
       <Image style={styles.pattern} source={require('image!pattern')} />
 
-        <View style={styles.recorder}>
-          <Recorder
-            ref="recorder"
-            config={config}
-            device="front"
-            style={styles.camera}>
-          </Recorder>
+          <View style={styles.recorder}>
+        <Camera
+        ref="recorder"
+        style={styles.camera}
+        type={this.state.cameraType}
+         >
+         </Camera>
           {countdown}
         </View>
 
