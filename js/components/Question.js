@@ -176,7 +176,7 @@ var Question = React.createClass({
   },
 
   render: function() {
-    var component, button, countdown, copy, legal, remaining;
+    var component, button, countdown, copy, legal, remaining, background;
 
     //VIDEO
     if (this.state.done) {
@@ -212,31 +212,22 @@ var Question = React.createClass({
       );
     } else if(this.state.user.startRecord) { //User has started recording video
       button = (
-        <TouchableHighlight onPress={this.handleDone} style={SharedStyles.buttonContainer} underlayColor="transparent">
-          <Text style={SharedStyles.buttonText}>IM DONE</Text>
+        <TouchableHighlight onPress={this.handleDone} style={[SharedStyles.buttonContainer, styles.doneButton]} underlayColor="transparent">
+          <Text style={SharedStyles.buttonText}>DONE!</Text>
         </TouchableHighlight>
       );
-      copy = (
-        <View style={styles.copy}>
-          <Copy {...this.state} {...this.props} />
-        </View>
-      );
+      copy = <View />;
     } else { //Countdown is occuring before recording
       button = (
-        <View style={styles.none} />
+        <View style={[SharedStyles.buttonContainer, styles.doneButton, {opacity: 0}]} />
       );
-      copy = (
-        <View style={styles.copy}>
-          <Copy {...this.state} {...this.props} />
-        </View>
-      );
+      copy = <View />;
     }
 
     //COUNTDOWN
     if(this.state.user.ready) {
       countdown = (
         <View style={styles.countdown}>
-          <View style={styles.cameraFilter} />
           <Countdown style={styles.countdownNumbers} {...this.state} {...this.props} />
         </View>
       );
@@ -271,9 +262,17 @@ var Question = React.createClass({
       remaining = <View />;
     }
 
+    //BACKGROUND
+    if(this.state.done) {
+      background = <Image style={styles.patternPrimary} source={require('image!circles')} />;
+    } else {
+      background = <Image style={styles.patternPrimary} source={require('image!stars')} />;
+    }
+
+
     return (
       <View style={styles.container}>
-      <Image style={styles.pattern} source={require('image!pattern')} />
+      {background}
 
           <View style={styles.recorder}>
             <Recorder
@@ -300,20 +299,18 @@ module.exports = Question;
 
 var styles = StyleSheet.create({
   container: {
-    backgroundColor: '#00eae7',
+    backgroundColor: '#1d3586',
     flex: 1,
     height: ᐱ.percent.h(100),
     alignItems: 'center',
     justifyContent: 'center',
   },
-  pattern:{
-    width: ᐱ.percent.w(150),
-    height: ᐱ.percent.h(70),
-    marginTop: ᐱ.percent.h(-20),
-    marginLeft: ᐱ.percent.w(-20),
+  patternPrimary: {
+    width: ᐱ.percent.w(100),
+    height: ᐱ.percent.h(100),
     position: 'absolute',
-    transform: [{rotate: '20deg'}],
-    opacity: 0.3,
+    top: 0,
+    left: 0,
   },
   camera: {
     alignItems: 'center',
@@ -334,13 +331,6 @@ var styles = StyleSheet.create({
   recorder: {
     height: ᐱ.percent.w(60),
     width: ᐱ.percent.w(60),
-  },
-  cameraFilter:{
-    width: ᐱ.percent.w(60),
-    height: ᐱ.percent.w(60),
-    backgroundColor: '#ff3e9d',
-    opacity: 0.7,
-    position: 'absolute',
   },
   playVideo: {
     alignItems: 'center',
@@ -383,29 +373,32 @@ var styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: AppConstants.WIDTH,
-    height: 100,
-    backgroundColor: '#FFFF5A',
+    height: ᐱ.percent.h(10),
+    backgroundColor: '#facbcb',
   },
   remainingBar: {
-    backgroundColor: '#DD4199',
-    height: 100,
+    backgroundColor: 'white',
+    height: ᐱ.percent.h(10),
     width: AppConstants.WIDTH / 2,
     overflow: 'hidden',
   },
   remainingBarTextWrap: {
     width: AppConstants.WIDTH,
     overflow: 'hidden',
-    height: 100,
+    height: ᐱ.percent.h(10),
   },
   remainingCount: {
-    color: '#ffffff',
-    fontSize: 36,
+    color: '#1d3586',
+    fontSize: 15,
     position: 'absolute',
     top: 25,
     left: 10,
   },
   remainingUnderneath: {
-    color: '#DD4199',
+    color: 'white',
+  },
+  doneButton: {
+    marginTop: ᐱ.percent.h(10),
   }
 });
 
