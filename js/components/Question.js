@@ -9,6 +9,8 @@ var AppConstants = require('../constants/AppConstants'),
     Video = require('react-native-video'),
     ᐱ = require('../utils/Percent'),
     SharedStyles = require('./SharedStyles'),
+    Animated = require('Animated'),
+    tweenState = require('react-tween-state'),
     SetIntervalMixin = require('../mixins/SetIntervalMixin'),
     UserStore = require('../stores/UserStore'),
     Countdown = require('./Countdown'),
@@ -30,7 +32,7 @@ Parse.initialize("XR6QEwB3uUOhxCCT1jGigHQc9YO1vQHceRjrwAgN", "oGY2hPgTLoJJACeuV3
 
 
 var Question = React.createClass({
-  mixins: [SetIntervalMixin],
+  mixins: [SetIntervalMixin, tweenState.Mixin],
 
   getInitialState: function() {
     return {
@@ -43,7 +45,7 @@ var Question = React.createClass({
       secondsRemaining: secondsRemaining,
       showTimeRemaining: true,
       remainingText: `You'll have ${secondsRemaining} seconds`,
-      remainingWidth: AppConstants.WIDTH,
+      width: AppConstants.WIDTH,
       saveInProgress: false,
     };
   },
@@ -64,10 +66,21 @@ var Question = React.createClass({
       this.setState({remainingText: "Done"});
     }
 
-    this.setState({ secondsRemaining: this.state.secondsRemaining - 1, remainingWidth: w });
+    this.setState({ secondsRemaining: this.state.secondsRemaining - 1});
     if( this.state.secondsRemaining <= 0 ) {
       this.setState({showTimeRemaining: false});
     }
+  },
+
+  animateBar: function(){
+
+    this.state.width = AppConstants.WIDTH;
+
+    this.tweenState('width', {
+      easing: tweenState.easingTypes.linear,
+      duration: 5000,
+      endValue: this.state.width === 0,
+    });
   },
 
   _onChange: function() {
@@ -94,7 +107,8 @@ var Question = React.createClass({
     });
     videoTimeout = setTimeout(this.pause, 5000);
 
-    this.setInterval(this.tick, 1000);
+   this.setInterval(this.tick, 1000);
+   this.animateBar();
   },
 
   pause: function() {
@@ -270,11 +284,11 @@ var Question = React.createClass({
       remaining = (
         <View style={styles.remainingContainer}>
           <Text style={[styles.remainingCount, styles.remainingUnderneath]}>{secs}{this.state.remainingText}</Text>
-          <View style={[styles.remainingBar, {width: this.state.remainingWidth}]}>
+          <Animated.View style={[styles.remainingBar, {width: this.getTweeningValue('width')}]}>
             <View style={styles.remainingBarTextWrap}>
             <Text style={styles.remainingCount}>{secs}{this.state.remainingText}</Text>
             </View>
-          </View>
+          </Animated.View>
         </View>
       );
     } else {
