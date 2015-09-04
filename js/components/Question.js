@@ -136,36 +136,9 @@ var Question = React.createClass({
 
     this.refs.recorder.capture((err, url) => {
 
-      RNFS.readFile(url.split('file:///private')[1], false)
-      .then(function(contents){
-
-        var parseFile, NewAsset, AssetData;
-
-        parseFile = new Parse.File('video.mp4', {base64: contents});
-        parseFile.save().then(function(data){
-
-          AssetData = Parse.Object.extend("Assets");
-          NewAsset = new AssetData();
-          NewAsset.set("account_id", id); //TODO: Change to Email?
-          NewAsset.set("asset", parseFile);
-          NewAsset.save({
-            success: function(data){
-              goToDone();
-              console.log('SUCCESS');
-            },
-            error: function(data){
-             console.log('ERROR CONNECTING TO PARSE');
-            }
-          });
-
-        }, function(error) {
-          // The file either could not be read, or could not be saved to Parse.
-          console.log(error);
-        });
-      });
+      console.log("URL!!", url);
+    
     });
-
-   // this.refs.recorder.removeAllSegments();
   },
 
   goToDone: function(){
@@ -180,12 +153,12 @@ var Question = React.createClass({
 
   handleDone: function(){
     clearTimeout(videoTimeout);
+     this.refs.recorder.stopCapture();
     this.pause();
     this.setState({showTimeRemaining: false});
   },
 
   resetUser: function(){
-   // this.refs.recorder.removeAllSegments();
     AppActions.userReset();
   },
 
@@ -301,6 +274,8 @@ var Question = React.createClass({
         ref="recorder"
         style={styles.camera}
         type={this.state.cameraType}
+        captureTarget={this.state.captureTarget}
+        captureMode={this.state.captureMode}
          >
          </Camera>
           {countdown}
