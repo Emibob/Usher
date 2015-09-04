@@ -10,18 +10,17 @@ var {
 
 var SharedStyles = StyleSheet.create({
 	titleText: {
-    color: 'white',
+    color: '#facbcb',
     marginTop: 30,
-    fontSize: ᐱ.percent.h(3.9),
+    fontSize: ᐱ.percent.h(4),
     fontFamily: 'BrownStd-Bold',
-    shadowRadius: 0,
-    shadowOffset: {width: 2},
-    shadowColor: '#00eae7',
-    shadowOpacity: 1,
     backgroundColor: 'transparent',
-    paddingLeft: ᐱ.percent.w(8),
+    paddingLeft: ᐱ.percent.w(6),
+    paddingRight: ᐱ.percent.w(6),
     paddingBottom: 0,
     width: ᐱ.percent.w(100),
+    textAlign: 'center',
+    lineHeight: ᐱ.percent.h(7),
   },
   messageText: {
     color: 'white',
@@ -39,21 +38,18 @@ var SharedStyles = StyleSheet.create({
   },
   buttonContainer: {
     width: ᐱ.percent.w(35),
-    height: ᐱ.percent.h(4.8),
+    height: ᐱ.percent.h(8),
     backgroundColor: 'white',
-    borderWidth: 3,
-    borderColor: '#0072ff',
-    shadowRadius: 0,
-    shadowOffset: {width: 3, height: -3},
-    shadowColor: 'white',
-    shadowOpacity: 1,
+    borderRadius: ᐱ.percent.h(8) / 2,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
-    color: '#0072ff',
+    color: '#1d3586',
     fontFamily: 'BrownStd-Bold',
     fontSize: ᐱ.percent.h(3),
     backgroundColor: 'transparent',
+    padding: ᐱ.percent.w(2),
   },
 });
 

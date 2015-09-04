@@ -5,6 +5,8 @@ var AppConstants = require('../constants/AppConstants'),
     AppAction = require('../actions/AppActions'),
     Recorder  = require('react-native-screcorder'),
     React = require('react-native'),
+    Animated = require('Animated'),
+    tweenState = require('react-tween-state'),
     SharedStyles = require('./SharedStyles'),
     ᐱ = require('../utils/Percent'),
     Countdown = require('./Countdown'),
@@ -19,11 +21,15 @@ var {
 } = React;
 
 var Prompt = React.createClass({
+  mixins: [tweenState.Mixin],
+
   getInitialState: function() {
     return {
       user: this.props.user,
       promptTitle: this.props.promptTitle,
       promptText: this.props.promptText,
+      stripesHeight: ᐱ.percent.h(20),
+      buttonOpacity: 1,
     };
   },
 
@@ -43,40 +49,53 @@ var Prompt = React.createClass({
   },
 
   handleAppInit: function(){
-    AppAction.initApp();
+    this.animateHeight();
+    setTimeout(AppAction.initApp, 1000)
+  },
+
+  animateHeight: function(){
+
+    this.tweenState('stripesHeight', {
+      easing: tweenState.easingTypes.easeOutQuint,
+      duration: 1000,
+      endValue: this.state.stripesHeight === ᐱ.percent.h(20) ? ᐱ.percent.h(10) : ᐱ.percent.h(20),
+    });
+    this.tweenState('buttonOpacity', {
+      easing: tweenState.easingTypes.easeOutQuint,
+      duration: 200,
+      endValue: this.state.opacity === 0 ? 1 : 0,
+    });
   },
 
   render: function() {
-    var countdown, logo, button, readyText, copy;
-
-      logo = <Image style={styles.logo} source={require('image!diamonLogo')} />;
-      readyText = <Text style={styles.bringIt}>READY TO BRING IT?</Text>;
-      button = (
-        <TouchableHighlight style={SharedStyles.buttonContainer} onPress={this.handleAppInit} underlayColor="transparent">
-          <Text style={SharedStyles.buttonText}>IM READY</Text>
-        </TouchableHighlight>
-      );
-
     return(
       <View style={styles.container}>
 
-        <Image style={styles.pattern} source={require('image!pattern')} />
-        {logo}
-        {readyText}
-        <Copy {...this.state} {...this.props} />
+        <Image style={styles.patternPrimary} source={require('image!stars')} />
 
-        <View style={styles.center}>
-          {button}
+        <Image style={styles.logo} source={require('image!whitelogo')} />
+
+        <Text style={SharedStyles.titleText}>IF YOU HAD 45 SECONDS, WHAT WOULD YOU TELL THE PRESIDENT?</Text>
+
+        <View style={styles.stripesContainer}>
+          <Image style={[styles.patternSecondary, {height: this.getTweeningValue('stripesHeight')}]} source={require('image!pinkstripes')} />
+
+          <View style={styles.center}>
+            <TouchableHighlight style={[SharedStyles.buttonContainer, {backgroundColor: '#1d3586', opacity: this.getTweeningValue('buttonOpacity')}]} onPress={this.handleAppInit} underlayColor="transparent">
+              <Text style={[SharedStyles.buttonText, {color: 'white'}]}>RECORD</Text>
+            </TouchableHighlight>
+          </View>
         </View>
+
         <View style={styles.cameraContainer}>
-        <Image style={styles.frameLeft} source={require('image!cameraFrame')} />
-        <Image style={styles.frameRight} source={require('image!cameraFrame')} />
-          <Recorder
-              ref="recorder"
-              config={config}
-              device="front"
-              style={styles.camera}>
-          </Recorder>
+          <View style={styles.cameraBorder}>
+            <Recorder
+                ref="recorder"
+                config={config}
+                device="front"
+                style={styles.camera}>
+            </Recorder>
+          </View>
         </View>
       </View>
     );
@@ -93,24 +112,18 @@ var styles = StyleSheet.create({
     top: 0,
     left: 0,
   },
-  frameLeft: {
-    width: 94,
-    height: 94,
-    position: 'absolute',
-    bottom: -15,
-    left: 270,
-  },
-  frameRight: {
-    width: 94,
-    height: 94,
-    position: 'absolute',
-    top: 5,
-    right: 270,
-  },
   camera: {
-    width: 200,
-    height: 200,
-    marginTop: 20,
+    width: ᐱ.percent.w(32),
+    height: ᐱ.percent.w(32),
+  },
+  cameraBorder: {
+    marginTop: ᐱ.percent.h(8),
+    width: ᐱ.percent.w(37),
+    height: ᐱ.percent.w(37),
+    borderWidth: 2,
+    borderColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
     backgroundColor: '#00eae7',
@@ -119,21 +132,38 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  pattern:{
-    width: ᐱ.percent.w(150),
-    height: ᐱ.percent.h(70),
-    marginTop: ᐱ.percent.h(-20),
-    marginLeft: ᐱ.percent.w(-20),
+  patternPrimary: {
+    width: ᐱ.percent.w(100),
+    height: ᐱ.percent.h(100),
     position: 'absolute',
-    transform: [{rotate: '20deg'}],
-    opacity: 0.3,
+    top: 0,
+    left: 0,
+  },
+  stripesContainer: {
+    width: ᐱ.percent.w(100),
+    height: ᐱ.percent.h(20),
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  patternSecondary: {
+    width: ᐱ.percent.w(100),
+    height: ᐱ.percent.h(20),
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'white',
   },
   logo: {
-    width: ᐱ.percent.h(15),
-    height: ᐱ.percent.h(14),
+    width: ᐱ.percent.h(12),
+    height: ᐱ.percent.h(12),
     backgroundColor: 'transparent',
-    marginLeft: ᐱ.percent.w(2),
-    marginBottom: ᐱ.percent.h(2),
+    alignSelf: 'center',
+    resizeMode: 'contain',
+    marginTop: ᐱ.percent.h(8),
   },
   bringIt: {
     color: 'white',
@@ -168,11 +198,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent'
   },
-  // triangles: { //<Image style={styles.triangles} source={require('image!triangles')} />
-  //   width: ᐱ.percent.w(60),
-  //   flex: 1,
-  //   backgroundColor: 'transparent',
-  // }
 });
 
 
