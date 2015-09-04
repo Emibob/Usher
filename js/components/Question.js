@@ -8,6 +8,7 @@ var AppConstants = require('../constants/AppConstants'),
     Parse = require('parse').Parse,
     Video = require('react-native-video'),
     ᐱ = require('../utils/Percent'),
+    SharedStyles = require('./SharedStyles'),
     SetIntervalMixin = require('../mixins/SetIntervalMixin'),
     UserStore = require('../stores/UserStore'),
     Countdown = require('./Countdown'),
@@ -205,17 +206,13 @@ var Question = React.createClass({
     if(this.state.done) { //Video has been recorded & is playing back
       button = (
         <View style={styles.row}>
-        <TouchableHighlight onPress={this.resetUser} underlayColor="transparent">
-          <View style={[styles.readyButton, styles.rowButton]}>
-            <Text style={styles.readyText}>TRASH IT</Text>
-          </View>
-        </TouchableHighlight>
+          <TouchableHighlight onPress={this.resetUser} style={[SharedStyles.buttonContainer, styles.rowButton]} underlayColor="transparent">
+            <Text style={SharedStyles.buttonText}>TRASH IT</Text>
+          </TouchableHighlight>
 
-        <TouchableHighlight onPress={this.keep} underlayColor="transparent">
-          <View style={[styles.readyButton, styles.rowButton]}>
-            <Text style={styles.readyText}>SAVE IT</Text>
-          </View>
-        </TouchableHighlight>
+          <TouchableHighlight onPress={this.keep} style={[SharedStyles.buttonContainer, styles.rowButton]} underlayColor="transparent">
+            <Text style={SharedStyles.buttonText}>SAVE IT</Text>
+          </TouchableHighlight>
         </View>
       );
       copy = (
@@ -223,12 +220,10 @@ var Question = React.createClass({
           <Copy {...this.state} {...this.props} copy={"Yay, you did it! What do you want to do with the video?"}/>
         </View>
       );
-    } else if(this.state.user.startRecord){ //User has started recording video
+    } else if(this.state.user.startRecord) { //User has started recording video
       button = (
-        <TouchableHighlight onPress={this.handleDone} underlayColor="transparent">
-          <View style={styles.readyButton}>
-            <Text style={styles.readyText}>IM DONE</Text>
-          </View>
+        <TouchableHighlight onPress={this.handleDone} style={SharedStyles.buttonContainer} underlayColor="transparent">
+          <Text style={SharedStyles.buttonText}>IM DONE</Text>
         </TouchableHighlight>
       );
       copy = (
@@ -335,8 +330,8 @@ var styles = StyleSheet.create({
   camera: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 460,
-    height: 460,
+    width: ᐱ.percent.w(60),
+    height: ᐱ.percent.w(60),
     flex: 1,
     backgroundColor:'transparent',
   },
@@ -368,24 +363,6 @@ var styles = StyleSheet.create({
     position: 'absolute',
     marginTop: ᐱ.percent.w(-60),
     marginLeft: ᐱ.percent.w(20)
-  },
-  readyButton: {
-    width: AppConstants.WIDTH / 3,
-    height: ᐱ.percent.h(4.8),
-    backgroundColor: 'white',
-    borderWidth: 3,
-    borderColor: '#0072ff',
-    shadowRadius: 0,
-    shadowOffset: {width: 3, height: -3},
-    shadowColor: 'white',
-    shadowOpacity: 1,
-  },
-  readyText: {
-    color: '#0072ff',
-    fontFamily: 'BrownStd-Bold',
-    fontSize: ᐱ.percent.h(3),
-    marginLeft: ᐱ.percent.w(3),
-    backgroundColor: 'transparent',
   },
   none: {
     width: 0,
@@ -426,7 +403,6 @@ var styles = StyleSheet.create({
     height: 100,
     width: AppConstants.WIDTH / 2,
     overflow: 'hidden',
-
   },
   remainingBarTextWrap: {
     width: AppConstants.WIDTH,

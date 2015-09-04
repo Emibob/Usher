@@ -3,6 +3,7 @@
 var AppConstants = require('../constants/AppConstants'),
 		AppActions = require('../actions/AppActions'),
     React = require('react-native'),
+    SharedStyles = require('./SharedStyles'),
     ᐱ = require('../utils/Percent');
 
 var {
@@ -31,10 +32,10 @@ var Done = React.createClass({
   render: function() {
     return(
       <View style={styles.container}>
-        <Text style={styles.thanks}>Thanks for participating!</Text>
+        <Text style={SharedStyles.titleText}>Thanks for participating!</Text>
         
-        <TouchableHighlight onPress={this.handleDone} underlayColor="transparent">
-        	<Text>Do It Again</Text>
+        <TouchableHighlight onPress={this.handleDone} style={[SharedStyles.buttonContainer, styles.againButton]} underlayColor="transparent">
+        	<Text style={SharedStyles.buttonText}>Do It Again</Text>
         </TouchableHighlight>
       </View>
     );
@@ -44,7 +45,7 @@ var Done = React.createClass({
 module.exports = Done;
 
 var styles = StyleSheet.create({
-	 container: {
+	container: {
     backgroundColor: '#00eae7',
     width: AppConstants.WIDTH,
     height: AppConstants.HEIGHT,
@@ -52,19 +53,8 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-	thanks: {
-		color: 'white',
-    fontSize: ᐱ.percent.h(2.7),
-    fontFamily: 'BrownStd-Bold',
-    shadowRadius: 0,
-    shadowOffset: {width: 2},
-    shadowColor: '#00eae7',
-    shadowOpacity: 1,
-    backgroundColor: 'transparent',
-    paddingLeft: ᐱ.percent.w(8),
-    paddingRight: ᐱ.percent.w(8),
-    paddingTop: 0,
-    marginBottom: ᐱ.percent.h(4),
-	} 
+  againButton: {
+    marginTop: ᐱ.percent.h(4),
+  }
 });
 

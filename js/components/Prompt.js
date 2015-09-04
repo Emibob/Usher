@@ -5,6 +5,7 @@ var AppConstants = require('../constants/AppConstants'),
     AppAction = require('../actions/AppActions'),
     Recorder  = require('react-native-screcorder'),
     React = require('react-native'),
+    SharedStyles = require('./SharedStyles'),
     ᐱ = require('../utils/Percent'),
     Countdown = require('./Countdown'),
     Copy = require('./Copy');
@@ -50,10 +51,8 @@ var Prompt = React.createClass({
       logo = <Image style={styles.logo} source={require('image!diamonLogo')} />;
       readyText = <Text style={styles.bringIt}>READY TO BRING IT?</Text>;
       button = (
-        <TouchableHighlight onPress={this.handleAppInit}>
-          <View style={styles.readyButton}>
-            <Text style={styles.readyText}>IM READY</Text>
-          </View>
+        <TouchableHighlight style={SharedStyles.buttonContainer} onPress={this.handleAppInit} underlayColor="transparent">
+          <Text style={SharedStyles.buttonText}>IM READY</Text>
         </TouchableHighlight>
       );
 

@@ -43,7 +43,7 @@ var App = React.createClass({
   render: function() {
     var component;
 
-    if(this.state.user.init && !this.state.user.videoIsSaved){
+    if(this.state.user.init && !this.state.user.videoIsSaved) {
       component = <Question {...this.state} {...this.props} />;
     } else if (this.state.user.videoIsSaved) {
       component = <Done {...this.state} {...this.props} />;
