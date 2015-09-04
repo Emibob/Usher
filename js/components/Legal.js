@@ -4,6 +4,7 @@ var AppConstants = require('../constants/AppConstants'),
     UserStore = require('../stores/UserStore'),
     React = require('react-native'),
     AppActions = require('../actions/AppActions'),
+    SharedStyles = require('./SharedStyles'),
     ᐱ = require('../utils/Percent');
 
 var {
@@ -78,11 +79,11 @@ var Legal = React.createClass({
     if (this.state.bumpedUp && !this.state.loading && !this.state.error) {
       legalCopy = <View style={styles.halfScreen} />
     } else if (this.state.loading) {
-      legalCopy = <Text style={styles.halfScreen}>Loading...</Text>
+      legalCopy = <Text style={[styles.halfScreen, SharedStyles.titleText]}>Saving...</Text>
     } else if (this.state.error) {
-      legalCopy = <Text style={styles.halfScreen}>{this.state.error}</Text>
+      legalCopy = <Text style={[styles.halfScreen, SharedStyles.titleText]}>{this.state.error}</Text>
     } else {
-      legalCopy = <Text style={styles.legalCopy}>Do you agree to everything? If so please give us your email & hit accept.  Blood cats theyll tell you. Football helmet some indie record thats much cooler than. Mine nasty scar traffic lights brave and wild darling. Im a nightmare dressed like a daydream Kanye big black cars. Fuck sewing machines operation hummingbird. Twin sized bed fades in time Country Music Hall of. Fame in the blink of an eye long list of. Ex-lovers rhode island gravity lose. It all even now banjo people say everybody. Loves pretty state of grace upstate my. Next mistake madison square I know places upstate cafe. Shellback dear John my ex-man.</Text>;
+      legalCopy = <Text style={styles.legalCopy}>PHOTO/VIDEO RELEASE: For good and valuable consideration, the receipt and sufficiency of which is hereby acknowledged, I hereby grant to Refinery 29 Inc. (“Company”) and its assigns, licensees, sublicensees, successors-in-interest, legal representatives, and heirs the absolute, irrevocable right and retroactive (if applicable), unrestricted permission to use photograph(s), video, audio, and audio-visual recordings, as well as results and proceeds thereof of my likeness and voice taken of me by or on behalf of the Company (collectively, the “Content”) in all forms, in all medium, in any manner, for any commercial, editorial or any other lawful purposes in connection with photos or videos designated by Refinery29. I hereby waive any right to royalties or other compensation arising from or related to the use of the Content. I also hereby agree to release, defend, and hold harmless the Company and its agents or employees, from and against any claims or liability arising from or related to the rights granted herein. It is the discretion of the Company to decide whether and how to use the Content. I agree to execute in the future any further documents that may be necessary to perfect Company’s ownership of all rights in the Content or other works containing the Content. I acknowledge that I will not have any rights or interest in the assets containing the Content whatsoever. Nothing herein will be construed to obligate Company to produce, distribute or use any of the rights granted herein. This agreement will be construed according to the laws of the State of New York applicable to agreements which are executed and fully performed within said State. This agreement contains the entire understanding of the parties relating to the subject matter, and this agreement cannot be changed except by written agreement executed by the Party to be bound. I hereby warrant that I am at least 18 years old or that I am the parent or guardian of the participant. This release will be binding upon me and my heirs, legal representatives, and assigns. Prior to checking the box, I have read the above authorization, release, and agreement, prior to its execution, and I am fully familiar with the contents thereof.</Text>;
     }
 
     return(
@@ -115,16 +116,12 @@ var Legal = React.createClass({
         />
 
         <View style={styles.buttons}>
-          <TouchableHighlight onPress={this.handleAccept} underlayColor="transparent">
-            <View style={styles.readyButton}>
-              <Text style={styles.readyText}>ACCEPT</Text>
-            </View>
+          <TouchableHighlight onPress={this.handleAccept} style={[styles.rowButton, SharedStyles.buttonContainer]} underlayColor="transparent">
+            <Text style={SharedStyles.buttonText}>ACCEPT</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={this.handleCancel} underlayColor="transparent">
-            <View style={styles.readyButton}>
-              <Text style={styles.readyText}>CANCEL</Text>
-            </View>
+          <TouchableHighlight onPress={this.handleCancel} style={[styles.rowButton, SharedStyles.buttonContainer]} underlayColor="transparent">
+            <Text style={SharedStyles.buttonText}>CANCEL</Text>
           </TouchableHighlight>
         </View>
 
@@ -164,25 +161,6 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
   },
-  readyButton: {
-    width: AppConstants.WIDTH / 3,
-    height: ᐱ.percent.h(4.8),
-    backgroundColor: 'white',
-    borderWidth: 3,
-    borderColor: '#0072ff',
-    shadowRadius: 0,
-    shadowOffset: {width: 3, height: -3},
-    shadowColor: 'white',
-    shadowOpacity: 1,
-    margin: 12,
-  },
-  readyText: {
-    color: '#0072ff',
-    fontFamily: 'BrownStd-Bold',
-    fontSize: ᐱ.percent.h(3),
-    marginLeft: ᐱ.percent.w(3),
-    backgroundColor: 'transparent',
-  },
   inputs: {
     height: 40,
     borderColor: 'white',
@@ -190,8 +168,14 @@ var styles = StyleSheet.create({
     margin: 10,
     color: 'white',
     padding: 4,
+    marginLeft: ᐱ.percent.w(8),
+    marginRight: ᐱ.percent.w(8),
+    fontFamily: 'BrownStd-Bold',
   },
   halfScreen: {
     flex: 0.5,
-  }
+  },
+  rowButton: {
+    margin: 12,
+  },
 });
