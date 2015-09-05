@@ -47,11 +47,13 @@ var Question = React.createClass({
       remainingText: `You'll have ${secondsRemaining} seconds`,
       width: AppConstants.WIDTH,
       saveInProgress: false,
+      remainingTextOpacity: 0,
     };
   },
 
   componentDidMount: function() {
     UserStore.addChangeListener(this._onChange);
+    this.animateInRemainingText();
     this.handleReady();
   },
 
@@ -82,6 +84,15 @@ var Question = React.createClass({
       easing: tweenState.easingTypes.linear,
       duration: secs,
       endValue: 0,
+    });
+  },
+
+  animateInRemainingText: function(){
+
+    this.tweenState('remainingTextOpacity', {
+      easing: tweenState.easingTypes.easeOutQuint,
+      duration: 500,
+      endValue: this.state.remainingTextOpacity === 0 ? 1 : 0,
     });
   },
 
@@ -247,13 +258,13 @@ var Question = React.createClass({
 
     //TIME REMAINING
     if (this.state.showTimeRemaining) {
-      var secs = this.state.recording === true?  this.state.secondsRemaining : '';
+      var secs = this.state.recording === true ?  this.state.secondsRemaining : '';
       remaining = (
         <View style={styles.remainingContainer}>
           <Text style={[styles.remainingCount, styles.remainingUnderneath]}>{secs}{this.state.remainingText}</Text>
           <Animated.View style={[styles.remainingBar, {width: this.getTweeningValue('width')}]}>
             <View style={styles.remainingBarTextWrap}>
-            <Text style={styles.remainingCount}>{secs}{this.state.remainingText}</Text>
+            <Animated.Text style={[styles.remainingCount, {opacity: this.getTweeningValue('remainingTextOpacity')}]}>{secs}{this.state.remainingText}</Animated.Text>
             </View>
           </Animated.View>
         </View>
@@ -291,6 +302,7 @@ var Question = React.createClass({
           {button}
 
           {legal}
+          <Image style={styles.patternSecondary} source={require('image!pinkstripes')} />
           {remaining}
       </View>
     );
@@ -401,7 +413,15 @@ var styles = StyleSheet.create({
   },
   doneButton: {
     marginTop: ᐱ.percent.h(10),
-  }
+  },
+  patternSecondary: {
+    width: ᐱ.percent.w(100),
+    height: ᐱ.percent.h(10),
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    //backgroundColor: 'white',
+  },
 });
 
 var config = {
