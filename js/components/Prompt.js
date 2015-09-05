@@ -30,6 +30,7 @@ var Prompt = React.createClass({
       promptText: this.props.promptText,
       stripesHeight: ᐱ.percent.h(20),
       buttonOpacity: 1,
+      fakeRemainingBarOpacity: 0,
     };
   },
 
@@ -60,10 +61,15 @@ var Prompt = React.createClass({
       duration: 1000,
       endValue: this.state.stripesHeight === ᐱ.percent.h(20) ? ᐱ.percent.h(10) : ᐱ.percent.h(20),
     });
+    this.tweenState('fakeRemainingBarOpacity', {
+      easing: tweenState.easingTypes.easeOutQuint,
+      duration: 1000,
+      endValue: this.state.fakeRemainingBarOpacity === 1 ? 0 : 1,
+    });
     this.tweenState('buttonOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
       duration: 200,
-      endValue: this.state.opacity === 0 ? 1 : 0,
+      endValue: this.state.buttonOpacity === 0 ? 1 : 0,
     });
   },
 
@@ -79,6 +85,7 @@ var Prompt = React.createClass({
 
         <View style={styles.stripesContainer}>
           <Image style={[styles.patternSecondary, {height: this.getTweeningValue('stripesHeight')}]} source={require('image!pinkstripes')} />
+          <View style={[styles.fakeRemainingBar, {height: this.getTweeningValue('stripesHeight'), opacity: this.getTweeningValue('fakeRemainingBarOpacity')}]} />
 
           <View style={styles.center}>
             <TouchableHighlight style={[SharedStyles.buttonContainer, {backgroundColor: '#1d3586', opacity: this.getTweeningValue('buttonOpacity')}]} onPress={this.handleAppInit} underlayColor="transparent">
@@ -198,6 +205,14 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent'
   },
+  fakeRemainingBar: {
+    backgroundColor: 'white',
+    width: ᐱ.percent.w(100),
+    height: ᐱ.percent.h(10),
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+  }
 });
 
 
