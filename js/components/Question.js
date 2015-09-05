@@ -263,8 +263,10 @@ var Question = React.createClass({
     }
 
     //BACKGROUND
-    if(this.state.done) {
+    if(this.state.done && !this.state.legal) {
       background = <Image style={styles.patternPrimary} source={require('image!circles')} />;
+    } else if(this.state.legal) {
+      background = <Image style={styles.patternPrimary} source={require('image!diagonal')} />;
     } else {
       background = <Image style={styles.patternPrimary} source={require('image!stars')} />;
     }

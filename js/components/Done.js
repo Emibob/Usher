@@ -11,6 +11,7 @@ var {
   StyleSheet,
   Text,
   TouchableHighlight,
+  Image,
 } = React;
 
 var doneTimeout;
@@ -32,10 +33,14 @@ var Done = React.createClass({
   render: function() {
     return(
       <View style={styles.container}>
-        <Text style={SharedStyles.titleText}>Thanks for participating!</Text>
+        <Image style={styles.patternPrimary} source={require('image!bluestripes')} />
+        <Image style={styles.check} source={require('image!check')} />
+
+        <Text style={[SharedStyles.titleText, {color: 'white'}]}>THANKS FOR SPENDING SOME TIME AND VOTING YOUR VALUES!</Text>
+        <Text style={[SharedStyles.messageText, {color: '#facbcb'}]}>ENJOY THE REST OF THE 29 ROOMS!</Text>
         
         <TouchableHighlight onPress={this.handleDone} style={[SharedStyles.buttonContainer, styles.againButton]} underlayColor="transparent">
-        	<Text style={SharedStyles.buttonText}>Do It Again</Text>
+        	<Text style={SharedStyles.buttonText}>DO IT AGAIN</Text>
         </TouchableHighlight>
       </View>
     );
@@ -55,6 +60,16 @@ var styles = StyleSheet.create({
   },
   againButton: {
     marginTop: ᐱ.percent.h(4),
-  }
+  },
+  patternPrimary: {
+    width: ᐱ.percent.w(100),
+    height: ᐱ.percent.h(100),
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  check: {
+    backgroundColor: 'transparent',
+  },
 });
 
