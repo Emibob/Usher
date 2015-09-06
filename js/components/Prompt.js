@@ -33,6 +33,7 @@ var Prompt = React.createClass({
 
   componentWillUnmount: function() {
     UserStore.removeChangeListener(this._onChange);
+    this.refs.recorder.removeAllSegments();
   },
 
   _onChange: function() {

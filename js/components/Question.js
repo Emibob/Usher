@@ -41,7 +41,7 @@ var Question = React.createClass({
       recording: false,
       user: this.props.user,
       legal: false,
-      videoTime: 5000,
+      videoTime: secondsRemaining * 1000,
       secondsRemaining: secondsRemaining,
       showTimeRemaining: true,
       remainingText: `You'll have ${secondsRemaining} seconds`,
@@ -60,6 +60,7 @@ var Question = React.createClass({
   },
 
   tick: function() {
+    if (this.state.done) { return; }
     var w = (this.state.secondsRemaining - 1) / secondsRemaining * AppConstants.WIDTH;
 
     if ( w <= 0 ) {
@@ -79,7 +80,7 @@ var Question = React.createClass({
     this.tweenState('width', {
       easing: tweenState.easingTypes.linear,
       duration: 5000,
-      endValue: this.state.width === 0,
+      endValue: 0,
     });
   },
 
@@ -92,6 +93,7 @@ var Question = React.createClass({
       this.record();
     }
 
+      console.log(this.state.user.info, this.state.saveInProgress);
     if(this.state.user.info && !this.state.saveInProgress){
       this.save();
     }
@@ -114,12 +116,13 @@ var Question = React.createClass({
   pause: function() {
     this.refs.recorder.pause();
     this.setState({recording: false});
-    setTimeout(this.review, 2000);
+    setTimeout(this.review, 1000);
   },
 
   review: function(){
     this.refs.recorder.save((err, url) => {
 
+      console.log(url);
       this.setState({
         done: true,
         file: url
@@ -141,41 +144,12 @@ var Question = React.createClass({
     //USER EMAIL: this.state.user.info.email
     //USER NAME: this.state.user.info.name
 
-    var id = this.props.user.id; //TODO: Remove?
     var goToDone = this.goToDone;
 
-    this.refs.recorder.save((err, url) => {
-
-      RNFS.readFile(url.split('file:///private')[1], false)
-      .then(function(contents){
-
-        var parseFile, NewAsset, AssetData;
-
-        parseFile = new Parse.File('video.mp4', {base64: contents});
-        parseFile.save().then(function(data){
-
-          AssetData = Parse.Object.extend("Assets");
-          NewAsset = new AssetData();
-          NewAsset.set("account_id", id); //TODO: Change to Email?
-          NewAsset.set("asset", parseFile);
-          NewAsset.save({
-            success: function(data){
-              goToDone();
-              console.log('SUCCESS');
-            },
-            error: function(data){
-             console.log('ERROR CONNECTING TO PARSE');
-            }
-          });
-
-        }, function(error) {
-          // The file either could not be read, or could not be saved to Parse.
-          console.log(error);
-        });
-      });
+    this.refs.recorder.saveToCameraRoll((err, url) => {
+      this.refs.recorder.removeAllSegments();
+      setTimeout(goToDone, 500);
     });
-
-    this.refs.recorder.removeAllSegments();
   },
 
   goToDone: function(){
@@ -295,21 +269,19 @@ var Question = React.createClass({
       remaining = <View />;
     }
 
-
     return (
       <View style={styles.container}>
       <Image style={styles.pattern} source={require('image!pattern')} />
 
-        <View style={styles.recorder}>
-          <Recorder
-            ref="recorder"
-            config={config}
-            device="front"
-            style={styles.camera}>
-          </Recorder>
-          {countdown}
-        </View>
-
+          <View style={styles.recorder}>
+            <Recorder
+              ref="recorder"
+              config={config}
+              device="front"
+              style={styles.camera}>
+            </Recorder>
+            {countdown}
+          </View>
           {component}
 
           {copy}
@@ -452,3 +424,4 @@ var config = {
     quality: "HighestQuality" // HighestQuality || MediumQuality || LowQuality
   },
 };
+

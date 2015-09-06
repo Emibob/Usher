@@ -60,7 +60,6 @@ function handleCountdown(seconds){
 
 function handleSetRecordInProgress(){
   _user.recordInProgress = true;
-  UserStore.emitChange();
 }
 
 /**
@@ -75,7 +74,6 @@ function handleUserReset(){
     recordInProgress: false,
     init: false,
   };
-  UserStore.emitChange();
 }
 
 /**
@@ -85,7 +83,6 @@ function handleUserReset(){
 
 function handleSaveUserInfo(userInfo){
   _user.info = {email: userInfo.email, name: userInfo.name};
-  UserStore.emitChange();
 }
 
 /**
@@ -95,7 +92,6 @@ function handleSaveUserInfo(userInfo){
 
 function handleVideoIsSaved(bool){
   _user.videoIsSaved = bool;
-  UserStore.emitChange();
 }
 
 
@@ -160,7 +156,7 @@ AppDispatcher.register(function(action) {
       handleSaveUserInfo(action.userInfo);
       UserStore.emitChange();
       break;
-    
+
 
     default:
       // no op
