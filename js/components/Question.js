@@ -93,6 +93,7 @@ var Question = React.createClass({
       this.record();
     }
 
+      console.log(this.state.user.info, this.state.saveInProgress);
     if(this.state.user.info && !this.state.saveInProgress){
       this.save();
     }
@@ -115,12 +116,13 @@ var Question = React.createClass({
   pause: function() {
     this.refs.recorder.pause();
     this.setState({recording: false});
-    setTimeout(this.review, 2000);
+    setTimeout(this.review, 1000);
   },
 
   review: function(){
     this.refs.recorder.save((err, url) => {
 
+      console.log(url);
       this.setState({
         done: true,
         file: url
@@ -142,15 +144,13 @@ var Question = React.createClass({
     //USER EMAIL: this.state.user.info.email
     //USER NAME: this.state.user.info.name
 
-    var id = this.props.user.id; //TODO: Remove?
     var goToDone = this.goToDone;
 
     this.refs.recorder.saveToCameraRoll((err, url) => {
-      console.log(err);
-      this.goToDone();
+      this.refs.recorder.removeAllSegments();
+      setTimeout(goToDone, 500);
     });
-
-      },
+  },
 
   goToDone: function(){
     if(!this.state.user.videoIsSaved){
@@ -269,21 +269,19 @@ var Question = React.createClass({
       remaining = <View />;
     }
 
-
     return (
       <View style={styles.container}>
       <Image style={styles.pattern} source={require('image!pattern')} />
 
-        <View style={styles.recorder}>
-          <Recorder
-            ref="recorder"
-            config={config}
-            device="front"
-            style={styles.camera}>
-          </Recorder>
-          {countdown}
-        </View>
-
+          <View style={styles.recorder}>
+            <Recorder
+              ref="recorder"
+              config={config}
+              device="front"
+              style={styles.camera}>
+            </Recorder>
+            {countdown}
+          </View>
           {component}
 
           {copy}
@@ -426,3 +424,4 @@ var config = {
     quality: "HighestQuality" // HighestQuality || MediumQuality || LowQuality
   },
 };
+

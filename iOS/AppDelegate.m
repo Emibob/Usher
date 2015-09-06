@@ -31,7 +31,7 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://192.168.29.218:8081/index.ios.bundle"];
+  jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.9:8081/index.ios.bundle"];
 
   /**
    * OPTION 2
@@ -54,6 +54,20 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+
+  // remove temp files :)
+  NSString *tmpDirectory = NSTemporaryDirectory();
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  NSError *error;
+  NSArray *cacheFiles = [fileManager contentsOfDirectoryAtPath:tmpDirectory error:&error];
+  for (NSString *file in cacheFiles)
+  {
+    error = nil;
+    [fileManager removeItemAtPath:[tmpDirectory stringByAppendingPathComponent:file] error:&error];
+  }
+  
+
   return YES;
 }
 
