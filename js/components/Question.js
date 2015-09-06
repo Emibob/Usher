@@ -144,39 +144,12 @@ var Question = React.createClass({
     var id = this.props.user.id; //TODO: Remove?
     var goToDone = this.goToDone;
 
-    this.refs.recorder.save((err, url) => {
-
-      RNFS.readFile(url.split('file:///private')[1], false)
-      .then(function(contents){
-
-        var parseFile, NewAsset, AssetData;
-
-        parseFile = new Parse.File('video.mp4', {base64: contents});
-        parseFile.save().then(function(data){
-
-          AssetData = Parse.Object.extend("Assets");
-          NewAsset = new AssetData();
-          NewAsset.set("account_id", id); //TODO: Change to Email?
-          NewAsset.set("asset", parseFile);
-          NewAsset.save({
-            success: function(data){
-              goToDone();
-              console.log('SUCCESS');
-            },
-            error: function(data){
-             console.log('ERROR CONNECTING TO PARSE');
-            }
-          });
-
-        }, function(error) {
-          // The file either could not be read, or could not be saved to Parse.
-          console.log(error);
-        });
-      });
+    this.refs.recorder.saveToCameraRoll((err, url) => {
+      console.log(err);
+      this.goToDone();
     });
 
-    this.refs.recorder.removeAllSegments();
-  },
+      },
 
   goToDone: function(){
     if(!this.state.user.videoIsSaved){
