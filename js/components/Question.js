@@ -41,7 +41,7 @@ var Question = React.createClass({
       recording: false,
       user: this.props.user,
       legal: false,
-      videoTime: 5000,
+      videoTime: secondsRemaining * 1000,
       secondsRemaining: secondsRemaining,
       showTimeRemaining: true,
       remainingText: `You'll have ${secondsRemaining} seconds`,
@@ -60,6 +60,7 @@ var Question = React.createClass({
   },
 
   tick: function() {
+    if (this.state.done) { return; }
     var w = (this.state.secondsRemaining - 1) / secondsRemaining * AppConstants.WIDTH;
 
     if ( w <= 0 ) {
@@ -79,7 +80,7 @@ var Question = React.createClass({
     this.tweenState('width', {
       easing: tweenState.easingTypes.linear,
       duration: 5000,
-      endValue: this.state.width === 0,
+      endValue: 0,
     });
   },
 
