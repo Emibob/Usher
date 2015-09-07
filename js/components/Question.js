@@ -93,7 +93,6 @@ var Question = React.createClass({
       this.record();
     }
 
-      console.log(this.state.user.info, this.state.saveInProgress);
     if(this.state.user.info && !this.state.saveInProgress){
       this.save();
     }
@@ -146,7 +145,7 @@ var Question = React.createClass({
 
     var goToDone = this.goToDone;
 
-    this.refs.recorder.saveToCameraRoll((err, url) => {
+    this.refs.recorder.saveToCameraRoll(`${this.state.user.info.name} (${this.state.user.info.email})`, (err, url) => {
       this.refs.recorder.removeAllSegments();
       setTimeout(goToDone, 500);
     });
