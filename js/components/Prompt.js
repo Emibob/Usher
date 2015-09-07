@@ -28,7 +28,7 @@ var Prompt = React.createClass({
       user: this.props.user,
       promptTitle: this.props.promptTitle,
       promptText: this.props.promptText,
-      stripesHeight: ᐱ.percent.h(20),
+      stripesHeight: ᐱ.percent.h(27),
       buttonOpacity: 1,
       fakeRemainingBarOpacity: 0,
     };
@@ -59,7 +59,7 @@ var Prompt = React.createClass({
     this.tweenState('stripesHeight', {
       easing: tweenState.easingTypes.easeOutQuint,
       duration: 1000,
-      endValue: this.state.stripesHeight === ᐱ.percent.h(20) ? ᐱ.percent.h(10) : ᐱ.percent.h(20),
+      endValue: this.state.stripesHeight === ᐱ.percent.h(27) ? ᐱ.percent.h(10) : ᐱ.percent.h(27),
     });
     this.tweenState('fakeRemainingBarOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
@@ -81,7 +81,7 @@ var Prompt = React.createClass({
 
         <Image style={styles.logo} source={require('image!whitelogo')} />
 
-        <Text style={SharedStyles.titleText}>IF YOU HAD 45 SECONDS, WHAT WOULD YOU TELL THE PRESIDENT?</Text>
+        <Text style={[SharedStyles.titleText, {marginTop: 20}]}>IF YOU HAD 45 SECONDS, WHAT WOULD YOU TELL THE PRESIDENT?</Text>
 
         <View style={styles.stripesContainer}>
           <Image style={[styles.patternSecondary, {height: this.getTweeningValue('stripesHeight')}]} source={require('image!pinkstripes')} />
@@ -120,13 +120,13 @@ var styles = StyleSheet.create({
     left: 0,
   },
   camera: {
-    width: ᐱ.percent.w(32),
-    height: ᐱ.percent.w(32),
+    width: ᐱ.percent.w(22),
+    height: ᐱ.percent.w(22),
   },
   cameraBorder: {
     marginTop: ᐱ.percent.h(8),
-    width: ᐱ.percent.w(37),
-    height: ᐱ.percent.w(37),
+    width: ᐱ.percent.w(27),
+    height: ᐱ.percent.w(27),
     borderWidth: 2,
     borderColor: 'white',
     justifyContent: 'center',
@@ -148,7 +148,7 @@ var styles = StyleSheet.create({
   },
   stripesContainer: {
     width: ᐱ.percent.w(100),
-    height: ᐱ.percent.h(20),
+    height: ᐱ.percent.h(27),
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -158,7 +158,7 @@ var styles = StyleSheet.create({
   },
   patternSecondary: {
     width: ᐱ.percent.w(100),
-    height: ᐱ.percent.h(20),
+    height: ᐱ.percent.h(27),
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -170,40 +170,11 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent',
     alignSelf: 'center',
     resizeMode: 'contain',
-    marginTop: ᐱ.percent.h(8),
-  },
-  bringIt: {
-    color: 'white',
-    fontSize: ᐱ.percent.h(2.3),
-    fontFamily: 'BrownStd-Bold',
-    shadowRadius: 0,
-    shadowOffset: {width: 2},
-    shadowColor: '#00eae7',
-    shadowOpacity: 1,
-    backgroundColor: 'transparent',
-    paddingLeft: ᐱ.percent.w(8),
-  },
-  readyButton: {
-    width: AppConstants.WIDTH / 3,
-    height: ᐱ.percent.h(4.8),
-    backgroundColor: 'white',
-    borderWidth: 3,
-    borderColor: '#0072ff',
-    shadowRadius: 0,
-    shadowOffset: {width: 3, height: -3},
-    shadowColor: 'white',
-    shadowOpacity: 1,
-  },
-  readyText: {
-    color: '#0072ff',
-    fontFamily: 'BrownStd-Bold',
-    fontSize: ᐱ.percent.h(3),
-    marginLeft: ᐱ.percent.w(3),
-    backgroundColor: 'transparent',
   },
   center: {
     alignItems: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
   },
   fakeRemainingBar: {
     backgroundColor: 'white',
@@ -230,7 +201,7 @@ var config = {
   },
   audio: {
     enabled: true,
-    bitrate: 128000, // 128kbit/s
+    bitrate: 127000, // 127kbit/s
     channelsCount: 1, // Mono output
     format: "MPEG4AAC",
     quality: "HighestQuality" // HighestQuality || MediumQuality || LowQuality

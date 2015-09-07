@@ -218,7 +218,8 @@ var Question = React.createClass({
       );
       copy = (
         <View style={styles.doneCopy}>
-          <Copy {...this.state} {...this.props} copy={"Yay, you did it! What do you want to do with the video?"}/>
+          <Text style={[SharedStyles.titleText, {marginTop: 0}]}>YAY, YOU DID IT!</Text>
+          <Text style={[SharedStyles.titleText, {marginTop: 0}]}>WHAT DO YOU WANT TO DO WITH THE VIDEO?</Text>
         </View>
       );
     } else if(this.state.user.startRecord) { //User has started recording video
@@ -389,17 +390,20 @@ var styles = StyleSheet.create({
     width: AppConstants.WIDTH,
     height: ᐱ.percent.h(10),
     backgroundColor: '#facbcb',
+    justifyContent: 'center',
   },
   remainingBar: {
     backgroundColor: 'white',
     height: ᐱ.percent.h(10),
     width: AppConstants.WIDTH / 2,
     overflow: 'hidden',
+    justifyContent: 'center',
   },
   remainingBarTextWrap: {
     width: AppConstants.WIDTH,
     overflow: 'hidden',
     height: ᐱ.percent.h(10),
+    justifyContent: 'center',
   },
   remainingCount: {
     color: '#1d3586',

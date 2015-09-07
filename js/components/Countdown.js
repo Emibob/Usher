@@ -80,7 +80,9 @@ var Countdown = React.createClass({
 
     return(
         <View style={styles.countdown}>
-          {countdown}
+          <View style={styles.circle}>
+            {countdown}
+          </View>
         </View>
     );
   }
@@ -107,6 +109,16 @@ var styles = StyleSheet.create({
     fontSize: ᐱ.percent.h(40),
     backgroundColor: 'transparent',
   },
+  circle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    borderWidth: 3,
+    borderColor: 'white',
+    width: ᐱ.percent.w(30),
+    height: ᐱ.percent.w(30),
+    borderRadius: ᐱ.percent.w(15),
+  }
 });
 
 module.exports = Countdown;
