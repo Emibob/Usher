@@ -25,7 +25,7 @@ var {
   Image,
 } = React;
 
-var secondsRemaining = 5;
+var secondsRemaining = 45;
 var videoTimeout;
 
 Parse.initialize("XR6QEwB3uUOhxCCT1jGigHQc9YO1vQHceRjrwAgN", "oGY2hPgTLoJJACeuV3CJTihOMDlmE04UCUqq0ABb");
@@ -74,12 +74,13 @@ var Question = React.createClass({
   },
 
   animateBar: function(){
+    var secs = secondsRemaining * 1000;
 
     this.state.width = AppConstants.WIDTH;
 
     this.tweenState('width', {
       easing: tweenState.easingTypes.linear,
-      duration: 5000,
+      duration: secs,
       endValue: 0,
     });
   },
@@ -99,6 +100,8 @@ var Question = React.createClass({
   },
 
   record: function() {
+    var secs = secondsRemaining * 1000;
+
     AppActions.setRecordInProgress(); //Don't let it record again
 
     this.refs.recorder.record();
@@ -106,7 +109,7 @@ var Question = React.createClass({
       recording: true,
       remainingText: ' seconds left',
     });
-    videoTimeout = setTimeout(this.pause, 5000);
+    videoTimeout = setTimeout(this.pause, secs);
 
    this.setInterval(this.tick, 1000);
    this.animateBar();
