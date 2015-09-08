@@ -81,7 +81,7 @@ var Prompt = React.createClass({
 
         <Image style={styles.logo} source={require('image!whitelogo')} />
 
-        <Text style={[SharedStyles.titleText, {marginTop: 20}]}>IF YOU HAD 45 SECONDS, WHAT WOULD YOU TELL THE PRESIDENT?</Text>
+        <Text style={[SharedStyles.titleText, {marginTop: 20}]}>IF YOU HAD 45 SECONDS,{'\n'} WHAT WOULD YOU{'\n'} TELL THE PRESIDENT?</Text>
 
         <View style={styles.stripesContainer}>
           <Image style={[styles.patternSecondary, {height: this.getTweeningValue('stripesHeight')}]} source={require('image!pinkstripes')} />
@@ -124,7 +124,7 @@ var styles = StyleSheet.create({
     height: ᐱ.percent.w(22),
   },
   cameraBorder: {
-    marginTop: ᐱ.percent.h(8),
+    marginTop: ᐱ.percent.h(6),
     width: ᐱ.percent.w(27),
     height: ᐱ.percent.w(27),
     borderWidth: 2,
@@ -167,6 +167,7 @@ var styles = StyleSheet.create({
   logo: {
     width: ᐱ.percent.h(12),
     height: ᐱ.percent.h(12),
+    marginTop: -20,
     backgroundColor: 'transparent',
     alignSelf: 'center',
     resizeMode: 'contain',

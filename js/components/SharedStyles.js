@@ -13,7 +13,7 @@ var SharedStyles = StyleSheet.create({
     color: '#facbcb',
     marginTop: 30,
     fontSize: ᐱ.percent.h(4),
-    fontFamily: 'BrownStd-Bold',
+    fontFamily: 'BrownStd-Regular',
     backgroundColor: 'transparent',
     paddingLeft: ᐱ.percent.w(6),
     paddingRight: ᐱ.percent.w(6),
@@ -21,6 +21,7 @@ var SharedStyles = StyleSheet.create({
     width: ᐱ.percent.w(100),
     textAlign: 'center',
     lineHeight: ᐱ.percent.h(7),
+    letterSpacing: 2,
   },
   messageText: {
     color: 'white',
