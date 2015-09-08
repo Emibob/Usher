@@ -44,7 +44,7 @@ var Question = React.createClass({
       videoTime: secondsRemaining * 1000,
       secondsRemaining: secondsRemaining,
       showTimeRemaining: true,
-      remainingText: `You'll have ${secondsRemaining} seconds`,
+      remainingText: `YOU'LL HAVE ${secondsRemaining} SECONDS`,
       width: AppConstants.WIDTH,
       saveInProgress: false,
       remainingTextOpacity: 0,
@@ -133,7 +133,7 @@ var Question = React.createClass({
     this.refs.recorder.record();
     this.setState({
       recording: true,
-      remainingText: ' seconds left',
+      remainingText: ' SECONDS LEFT',
     });
     videoTimeout = setTimeout(this.pause, secs);
 
@@ -428,10 +428,13 @@ var styles = StyleSheet.create({
   },
   remainingCount: {
     color: '#1d3586',
-    fontSize: 15,
+    fontSize: 20,
     position: 'absolute',
     top: 25,
     left: 10,
+    lineHeight: 40,
+    marginLeft: 20,
+    fontFamily: 'BrownStd-Regular',
   },
   remainingUnderneath: {
     color: 'white',

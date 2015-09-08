@@ -23,7 +23,7 @@ var Countdown = React.createClass({
   getInitialState: function() {
     return {
       user: this.props.user,
-      marginTop: ᐱ.percent.h(-6),
+      marginTop: ᐱ.percent.h(-5),
       opacity: 1,
     };
   },
@@ -49,13 +49,13 @@ var Countdown = React.createClass({
   },
 
   animateOpacity: function(){
-    this.state.marginTop = ᐱ.percent.h(-6);
+    this.state.marginTop = ᐱ.percent.h(-5);
     this.state.opacity = 1;
 
     this.tweenState('marginTop', {
       easing: tweenState.easingTypes.easeOutQuint,
       duration: 1000,
-      endValue: this.state.marginTop === ᐱ.percent.h(-7) ? ᐱ.percent.h(-6) : ᐱ.percent.h(-7),
+      endValue: this.state.marginTop === ᐱ.percent.h(-7) ? ᐱ.percent.h(-5) : ᐱ.percent.h(-7),
     });
     this.tweenState('opacity', {
       easing: tweenState.easingTypes.easeOutQuint,
@@ -83,7 +83,7 @@ var styles = StyleSheet.create({
     fontSize: ᐱ.percent.w(10), //30
     backgroundColor: 'transparent',
     marginLeft: ᐱ.percent.w(10),
-    marginTop: ᐱ.percent.h(-6),
+    marginTop: ᐱ.percent.h(-5),
     fontFamily: 'BrownStd-Light',
   },
   countdown: {
