@@ -187,7 +187,7 @@ var Question = React.createClass({
   },
 
   render: function() {
-    var component, button, countdown, copy, legal, remaining, background;
+    var component, button, countdown, copy, legal, remaining, background, footer;
 
     //VIDEO
     if (this.state.done) {
@@ -277,10 +277,13 @@ var Question = React.createClass({
     //BACKGROUND
     if(this.state.done && !this.state.legal) {
       background = <Image style={styles.patternPrimary} source={require('image!circles')} />;
+      footer = <Image style={styles.patternSecondaryShort} source={require('image!pinkstripes')} />;
     } else if(this.state.legal) {
       background = <Image style={styles.patternPrimary} source={require('image!diagonal')} />;
+      footer = <Image style={styles.patternSecondaryShort} source={require('image!pinkstripes')} />;
     } else {
       background = <Image style={styles.patternPrimary} source={require('image!stars')} />;
+      footer = <Image style={styles.patternSecondary} source={require('image!pinkstripes')} />;
     }
 
 
@@ -303,7 +306,7 @@ var Question = React.createClass({
           {button}
 
           {legal}
-          <Image style={styles.patternSecondary} source={require('image!pinkstripes')} />
+          {footer}
           {remaining}
       </View>
     );
@@ -426,6 +429,15 @@ var styles = StyleSheet.create({
     left: 0,
     //backgroundColor: 'white',
   },
+  patternSecondaryShort: {
+    width: ᐱ.percent.w(100),
+    height: ᐱ.percent.h(5),
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    //backgroundColor: 'white',
+  },
+
 });
 
 var config = {

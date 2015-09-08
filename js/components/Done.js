@@ -22,7 +22,7 @@ var Done = React.createClass({
   },
 
   componentDidMount: function() {
-    doneTimeout = setTimeout(this.handleDone, 2000);
+    doneTimeout = setTimeout(this.handleDone, 5000);
   },
 
   handleDone: function(){
@@ -36,12 +36,8 @@ var Done = React.createClass({
         <Image style={styles.patternPrimary} source={require('image!bluestripes')} />
         <Image style={styles.check} source={require('image!check')} />
 
-        <Text style={[SharedStyles.titleText, {color: 'white'}]}>THANKS FOR SPENDING SOME TIME AND VOTING YOUR VALUES!</Text>
-        <Text style={[SharedStyles.messageText, {color: '#facbcb'}]}>ENJOY THE REST OF THE 29 ROOMS!</Text>
-        
-        <TouchableHighlight onPress={this.handleDone} style={[SharedStyles.buttonContainer, styles.againButton]} underlayColor="transparent">
-        	<Text style={SharedStyles.buttonText}>DO IT AGAIN</Text>
-        </TouchableHighlight>
+        <Text style={[SharedStyles.titleText, {color: 'white', marginBottom: 40}]}>THANKS FOR SPENDING{'\n'} SOME TIME AND VOTING{'\n'} YOUR VALUES!</Text>
+        <Text style={[SharedStyles.messageText, {color: '#facbcb'}]}>ENJOY THE REST OF #29ROOMS!</Text>
       </View>
     );
   }
