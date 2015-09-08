@@ -68,10 +68,8 @@ var Countdown = React.createClass({
     return(
         <View style={styles.countdown}>
           <View style={styles.circle}>
-            
-              <Text style={styles.numbers}>{this.state.user.timeRemaining}</Text>
-              <Animated.Text style={[styles.numbers, {marginTop: this.getTweeningValue('marginTop'), opacity: this.getTweeningValue('opacity')}]}>{this.state.user.timeRemaining + 1}</Animated.Text>
-
+            <Text style={styles.numbers}>{this.state.user.timeRemaining}</Text>
+            <Animated.Text style={[styles.numbers, {marginTop: this.getTweeningValue('marginTop'), opacity: this.getTweeningValue('opacity')}]}>{this.state.user.timeRemaining + 1}</Animated.Text>
           </View>
         </View>
     );
@@ -94,8 +92,6 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent',
     width: ᐱ.percent.w(60),
     height: ᐱ.percent.w(60),
-    // borderWidth: 4,
-    // borderColor: 'yellow',
   },
   circle: {
     alignItems: 'center',

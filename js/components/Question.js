@@ -25,8 +25,8 @@ var {
   Image,
 } = React;
 
-var secondsRemaining = 45;
-var videoTimeout;
+var secondsRemaining = 45,
+    videoTimeout;
 
 Parse.initialize("XR6QEwB3uUOhxCCT1jGigHQc9YO1vQHceRjrwAgN", "oGY2hPgTLoJJACeuV3CJTihOMDlmE04UCUqq0ABb");
 
@@ -49,7 +49,7 @@ var Question = React.createClass({
       saveInProgress: false,
       remainingTextOpacity: 0,
       doneButtonOpacity: 0,
-      removeDone: false,
+      doneButtonRemoved: false,
     };
   },
 
@@ -90,7 +90,6 @@ var Question = React.createClass({
   },
 
   animateInRemainingText: function() {
-
     this.tweenState('remainingTextOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
       duration: 500,
@@ -98,13 +97,12 @@ var Question = React.createClass({
     });
   },
 
-  fadeInDone: function() {
-
+  handleDoneButton: function() {
     this.tweenState('doneButtonOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
       delay: 5000,
       duration: 700,
-      endValue: (this.state.doneButtonOpacity === 0 && !this.state.removeDone) ? 1 : 0,
+      endValue: (this.state.doneButtonOpacity === 0 && !this.state.doneButtonRemoved) ? 1 : 0,
     });
   },
 
@@ -123,11 +121,10 @@ var Question = React.createClass({
   },
 
   record: function() {
-
     var secs = secondsRemaining * 1000;
 
     AppActions.setRecordInProgress(); //Don't let it record again
-    this.fadeInDone();
+    this.handleDoneButton();
 
     this.refs.recorder.record();
     this.setState({
@@ -168,9 +165,6 @@ var Question = React.createClass({
       saveInProgress: true,
     });
 
-    //USER EMAIL: this.state.user.info.email
-    //USER NAME: this.state.user.info.name
-
     var goToDone = this.goToDone;
 
     this.refs.recorder.saveToCameraRoll(`${this.state.user.info.name} (${this.state.user.info.email})`, (err, url) => {
@@ -192,11 +186,13 @@ var Question = React.createClass({
   handleDone: function(){
     clearTimeout(videoTimeout);
     this.pause();
+
     this.setState({
       showTimeRemaining: false,
-      removeDone: true,
+      doneButtonRemoved: true,
     });
-    this.fadeInDone();//TODO: rename this & make it suck less
+
+    this.handleDoneButton();
   },
 
   resetUser: function(){
@@ -445,7 +441,6 @@ var styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    //backgroundColor: 'white',
   },
   patternSecondaryShort: {
     width: ᐱ.percent.w(100),
@@ -453,9 +448,7 @@ var styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    //backgroundColor: 'white',
   },
-
 });
 
 var config = {
