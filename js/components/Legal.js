@@ -45,7 +45,7 @@ var Legal = React.createClass({
     this.refs.email.blur();
 
     var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-    
+
     if(emailRegex.test(this.state.email)) {
       this.setState({
         loading: true,
@@ -73,6 +73,10 @@ var Legal = React.createClass({
     });
   },
 
+  focusEmail: function() {
+    this.refs.email.focus();
+  },
+
   render: function() {
     var legalCopy;
 
@@ -96,7 +100,7 @@ var Legal = React.createClass({
       <Image style={styles.patternPrimary} source={require('image!diagonal')} />
 
       {legalCopy}
-        
+
         <TextInput
           ref="name"
           style={styles.inputs}
@@ -105,8 +109,11 @@ var Legal = React.createClass({
           onFocus={this.shiftFocus}
           enablesReturnKeyAutomatically={true}
           autoCorrect={true}
-          defaultValue={"NAME"}
+          placeholder="NAME"
+          clearButtonMode="while-editing"
+          returnKeyType="next"
           clearTextOnFocus={false}
+          onSubmitEditing={this.focusEmail}
         />
 
         <TextInput
@@ -116,8 +123,12 @@ var Legal = React.createClass({
           value={this.state.email}
           onFocus={this.shiftFocus}
           enablesReturnKeyAutomatically={true}
+          keyboardType="email-address"
           autoCorrect={true}
-          defaultValue={"EMAIL ADDRESS"}
+          placeholder="EMAIL ADDRESS"
+          clearButtonMode="while-editing"
+          onSubmitEditing={this.handleAccept}
+          returnKeyType="done"
           clearTextOnFocus={false}
         />
 
