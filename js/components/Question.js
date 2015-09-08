@@ -73,7 +73,11 @@ var Question = React.createClass({
 
     this.setState({ secondsRemaining: this.state.secondsRemaining - 1});
     if( this.state.secondsRemaining <= 0 ) {
-      this.setState({showTimeRemaining: false});
+      this.setState({
+        showTimeRemaining: false,
+        doneButtonRemoved: true,
+      });
+      this.handleDoneButton(0);
     }
   },
 
@@ -97,10 +101,10 @@ var Question = React.createClass({
     });
   },
 
-  handleDoneButton: function() {
+  handleDoneButton: function(delay) {
     this.tweenState('doneButtonOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
-      delay: 5000,
+      delay: delay,
       duration: 700,
       endValue: (this.state.doneButtonOpacity === 0 && !this.state.doneButtonRemoved) ? 1 : 0,
     });
@@ -124,7 +128,7 @@ var Question = React.createClass({
     var secs = secondsRemaining * 1000;
 
     AppActions.setRecordInProgress(); //Don't let it record again
-    this.handleDoneButton();
+    this.handleDoneButton(5000);
 
     this.refs.recorder.record();
     this.setState({
