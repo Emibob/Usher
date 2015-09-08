@@ -53,7 +53,7 @@ var Prompt = React.createClass({
 
   handleAppInit: function(){
     this.animatePage();
-    setTimeout(AppAction.initApp, 2000)
+    setTimeout(AppAction.initApp, 1400)
   },
 
   animatePage: function(){
