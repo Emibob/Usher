@@ -32,7 +32,7 @@
    */
 
 
-  jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.4:8081/index.ios.bundle"];
+  jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.2:8081/index.ios.bundle"];
 
   /**
    * OPTION 2
@@ -53,6 +53,9 @@
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [[UIViewController alloc] init];
   rootViewController.view = rootView;
+  
+  rootViewController.view.layer.contents = (id)[UIImage imageNamed:@"stars.png"].CGImage;
+
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
