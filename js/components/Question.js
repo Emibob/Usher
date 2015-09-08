@@ -128,7 +128,7 @@ var Question = React.createClass({
     var secs = secondsRemaining * 1000;
 
     AppActions.setRecordInProgress(); //Don't let it record again
-    this.handleDoneButton(5000);
+    this.handleDoneButton(3000);
 
     this.refs.recorder.record();
     this.setState({
