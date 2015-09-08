@@ -12,7 +12,7 @@ var SharedStyles = StyleSheet.create({
 	titleText: {
     color: '#facbcb',
     marginTop: 30,
-    fontSize: ᐱ.percent.h(4),
+    fontSize: ᐱ.percent.h(3.8),
     fontFamily: 'BrownStd-Regular',
     backgroundColor: 'transparent',
     paddingLeft: ᐱ.percent.w(6),
@@ -20,7 +20,7 @@ var SharedStyles = StyleSheet.create({
     paddingBottom: 0,
     width: ᐱ.percent.w(100),
     textAlign: 'center',
-    lineHeight: ᐱ.percent.h(7),
+    lineHeight: ᐱ.percent.h(6),
     letterSpacing: 2,
   },
   messageText: {
@@ -32,6 +32,7 @@ var SharedStyles = StyleSheet.create({
     width: ᐱ.percent.w(100),
     textAlign: 'center',
     marginBottom: ᐱ.percent.h(4),
+    letterSpacing: 2,
   },
   buttonContainer: {
     width: ᐱ.percent.w(17),

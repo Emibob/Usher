@@ -33,8 +33,8 @@ var Done = React.createClass({
   render: function() {
     return(
       <View style={styles.container}>
-        <Image style={styles.patternPrimary} source={require('image!bluestripes')} />
-        <Image style={styles.check} source={require('image!check')} />
+        <Image style={styles.patternPrimary} source={{uri: 'bluestripes', isStatic: true}} />
+        <Image style={styles.check} source={{uri: 'check', isStatic: true}} />
 
         <Text style={[SharedStyles.titleText, {color: 'white', marginBottom: 40}]}>THANKS FOR SPENDING{'\n'} SOME TIME AND VOTING{'\n'} YOUR VALUES!</Text>
         <Text style={[SharedStyles.messageText, {color: '#facbcb'}]}>ENJOY THE REST OF #29ROOMS!</Text>
@@ -65,6 +65,8 @@ var styles = StyleSheet.create({
     left: 0,
   },
   check: {
+    width: ᐱ.percent.w(30),
+    height: ᐱ.percent.w(30), 
     backgroundColor: 'transparent',
   },
 });

@@ -28,7 +28,7 @@ var Prompt = React.createClass({
       user: this.props.user,
       promptTitle: this.props.promptTitle,
       promptText: this.props.promptText,
-      stripesHeight: ᐱ.percent.h(27),
+      stripesHeight: 0,
       buttonOpacity: 1,
       fakeRemainingBarOpacity: 0,
       infoOpacity: 1,
@@ -53,20 +53,15 @@ var Prompt = React.createClass({
 
   handleAppInit: function(){
     this.animatePage();
-    setTimeout(AppAction.initApp, 1400)
+    setTimeout(AppAction.initApp, 1200)
   },
 
   animatePage: function(){
     //BAR
-    this.tweenState('stripesHeight', {
+    this.tweenState('stripesHeight', { //margin
       easing: tweenState.easingTypes.easeOutQuint,
       duration: 700,
-      endValue: this.state.stripesHeight === ᐱ.percent.h(27) ? ᐱ.percent.h(5) : ᐱ.percent.h(27),
-    });
-    this.tweenState('fakeRemainingBarOpacity', {
-      easing: tweenState.easingTypes.easeOutQuint,
-      duration: 700,
-      endValue: this.state.fakeRemainingBarOpacity === 1 ? 0 : 1,
+      endValue: this.state.stripesHeight === 0 ? ᐱ.percent.h(22) : 0,
     });
     this.tweenState('buttonOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
@@ -85,7 +80,7 @@ var Prompt = React.createClass({
     //REC
     this.tweenState('recorderPosition', {
       easing: tweenState.easingTypes.easeOutQuint,
-      delay: 1200,
+      delay: 1000,
       duration: 900,
       endValue: this.state.recorderPosition === ᐱ.percent.h(6) ? ᐱ.percent.h(39) : ᐱ.percent.h(6),
     });
@@ -95,15 +90,14 @@ var Prompt = React.createClass({
     return(
       <View style={styles.container}>
 
-        <Image style={styles.patternPrimary} source={require('image!stars')} />
+        <Image style={styles.patternPrimary} source={{uri: 'stars', isStatic: true}} />
 
-        <Image style={[styles.logo, {opacity: this.getTweeningValue('infoOpacity')}]} source={require('image!whitelogo')} />
+        <Image style={[styles.logo, {opacity: this.getTweeningValue('infoOpacity')}]} source={{uri: 'whitelogo', isStatic: true}} />
 
-        <Text style={[SharedStyles.titleText, {marginTop: 20, opacity: this.getTweeningValue('infoOpacity')}]}>IF YOU HAD 45 SECONDS,{'\n'} WHAT WOULD YOU{'\n'} TELL THE PRESIDENT?</Text>
+        <Text style={[SharedStyles.titleText, {marginTop: 0, opacity: this.getTweeningValue('infoOpacity')}]}>IF YOU HAD 45 SECONDS,{'\n'} WHAT WOULD YOU{'\n'} TELL THE NEXT PRESIDENT?</Text>
 
         <View style={styles.stripesContainer}>
-          <Image style={[styles.patternSecondary, {height: this.getTweeningValue('stripesHeight')}]} source={require('image!pinkstripes')} />
-          <View style={[styles.fakeRemainingBar, {height: this.getTweeningValue('stripesHeight'), opacity: this.getTweeningValue('fakeRemainingBarOpacity')}]} />
+          <Image style={[styles.patternSecondary, {top: this.getTweeningValue('stripesHeight')}]} source={{uri: 'pinkstripes', isStatic: true}} />
 
           <View style={styles.center}>
             <TouchableHighlight style={[SharedStyles.buttonContainer, {backgroundColor: '#1d3586', opacity: this.getTweeningValue('buttonOpacity')}]} onPress={this.handleAppInit} underlayColor="transparent">
@@ -180,7 +174,8 @@ var styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    backgroundColor: 'white',
+    resizeMode: 'stretch',
+    backgroundColor: 'transparent',
   },
   logo: {
     width: ᐱ.percent.h(12),
@@ -194,14 +189,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent',
     justifyContent: 'center',
-  },
-  fakeRemainingBar: {
-    backgroundColor: 'white',
-    width: ᐱ.percent.w(100),
-    height: ᐱ.percent.h(5),
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
   },
 });
 

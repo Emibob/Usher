@@ -45,7 +45,7 @@ var Question = React.createClass({
       secondsRemaining: secondsRemaining,
       showTimeRemaining: true,
       remainingText: `YOU'LL HAVE ${secondsRemaining} SECONDS`,
-      width: AppConstants.WIDTH,
+      width: 0,
       saveInProgress: false,
       remainingTextOpacity: 0,
       doneButtonOpacity: 0,
@@ -68,7 +68,7 @@ var Question = React.createClass({
     var w = (this.state.secondsRemaining - 1) / secondsRemaining * AppConstants.WIDTH;
 
     if ( w <= 0 ) {
-      this.setState({remainingText: "Done"});
+      this.setState({remainingText: "DONE"});
     }
 
     this.setState({ secondsRemaining: this.state.secondsRemaining - 1});
@@ -84,12 +84,12 @@ var Question = React.createClass({
   animateBar: function() {
     var secs = secondsRemaining * 1000;
 
-    this.state.width = AppConstants.WIDTH;
+    this.state.width = 0;
 
     this.tweenState('width', {
       easing: tweenState.easingTypes.linear,
       duration: secs,
-      endValue: 0,
+      endValue: ᐱ.percent.w(60),
     });
   },
 
@@ -225,25 +225,24 @@ var Question = React.createClass({
     if(this.state.done) { //Video has been recorded & is playing back
       button = (
         <View style={styles.row}>
-          <TouchableHighlight onPress={this.resetUser} style={[SharedStyles.buttonContainer, styles.rowButton]} underlayColor="transparent">
-            <Text style={SharedStyles.buttonText}>TRASH IT</Text>
+          <TouchableHighlight onPress={this.keep} style={[SharedStyles.buttonContainer, styles.rowButton]} underlayColor="transparent">
+            <Text style={SharedStyles.buttonText}>YES</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={this.keep} style={[SharedStyles.buttonContainer, styles.rowButton]} underlayColor="transparent">
-            <Text style={SharedStyles.buttonText}>SAVE IT</Text>
+          <TouchableHighlight onPress={this.resetUser} style={[SharedStyles.buttonContainer, styles.rowButton]} underlayColor="transparent">
+            <Text style={SharedStyles.buttonText}>NO</Text>
           </TouchableHighlight>
         </View>
       );
       copy = (
         <View style={styles.doneCopy}>
-          <Text style={[SharedStyles.titleText, {marginTop: 0}]}>YAY, YOU DID IT!</Text>
-          <Text style={[SharedStyles.titleText, {marginTop: 0}]}>WHAT DO YOU WANT TO DO WITH THE VIDEO?</Text>
+          <Text style={[SharedStyles.titleText, {marginTop: 20, marginBottom: 10}]}>CAN WE FEATURE YOUR THOUGHTS IN A REFINERY29 VIDEO?</Text>
         </View>
       );
     } else if(this.state.user.startRecord) { //User has started recording video
       button = (
         <TouchableHighlight onPress={this.handleDone} style={[SharedStyles.buttonContainer, styles.doneButton, {opacity: this.getTweeningValue('doneButtonOpacity')}]} underlayColor="transparent">
-          <Text style={SharedStyles.buttonText}>DONE!</Text>
+          <Text style={SharedStyles.buttonText}>I'M DONE!</Text>
         </TouchableHighlight>
       );
       copy = <View />;
@@ -294,14 +293,14 @@ var Question = React.createClass({
 
     //BACKGROUND
     if(this.state.done && !this.state.legal) {
-      background = <Image style={styles.patternPrimary} source={require('image!circles')} />;
-      footer = <Image style={styles.patternSecondaryShort} source={require('image!pinkstripes')} />;
+      background = <Image style={styles.patternPrimary} source={{uri: 'circles', isStatic: true}} />;
+      footer = <Image style={styles.patternSecondaryShort} source={{uri: 'pinkstripes', isStatic: true}} />;
     } else if(this.state.legal) {
-      background = <Image style={styles.patternPrimary} source={require('image!diagonal')} />;
-      footer = <Image style={styles.patternSecondaryShort} source={require('image!pinkstripes')} />;
+      background = <Image style={styles.patternPrimary} source={{uri: 'diagonal', isStatic: true}} />;
+      footer = <Image style={styles.patternSecondaryShort} source={{uri: 'pinkstripes', isStatic: true}} />;
     } else {
-      background = <Image style={styles.patternPrimary} source={require('image!stars')} />;
-      footer = <Image style={styles.patternSecondary} source={require('image!pinkstripes')} />;
+      background = <Image style={styles.patternPrimary} source={{uri: 'stars', isStatic: true}} />;
+      footer = <Image style={styles.patternSecondary} source={{uri: 'pinkstripes', isStatic: true}} />;
     }
 
 
@@ -317,6 +316,7 @@ var Question = React.createClass({
               style={styles.camera}>
             </Recorder>
             {countdown}
+            {remaining}
           </View>
           {component}
 
@@ -325,7 +325,7 @@ var Question = React.createClass({
 
           {legal}
           {footer}
-          {remaining}
+          
       </View>
     );
   },
@@ -398,45 +398,54 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   rowButton: {
-    margin: 12,
+    marginTop: 20,
+    marginLeft: 12,
+    marginRight: 12,
   },
   doneCopy: {
     marginTop: ᐱ.percent.h(3),
     backgroundColor: 'transparent',
   },
+
+
   remainingContainer: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: AppConstants.WIDTH,
+    width: ᐱ.percent.w(60),
     height: ᐱ.percent.h(5),
-    backgroundColor: '#facbcb',
+    backgroundColor: 'white',
     justifyContent: 'center',
   },
   remainingBar: {
-    backgroundColor: 'white',
+    backgroundColor: '#facbcb',
     height: ᐱ.percent.h(5),
-    width: AppConstants.WIDTH / 2,
+    width: ᐱ.percent.w(60)/ 2,
     overflow: 'hidden',
     justifyContent: 'center',
   },
   remainingBarTextWrap: {
-    width: AppConstants.WIDTH,
+    width: ᐱ.percent.w(60),
     overflow: 'hidden',
     height: ᐱ.percent.h(5),
     justifyContent: 'center',
   },
   remainingCount: {
-    color: '#1d3586',
+    color: 'white',
     fontSize: 15,
     position: 'absolute',
     top: 15,
     left: 25,
     fontFamily: 'BrownStd-Regular',
+    letterSpacing: 2,
+    overflow: 'hidden',
+    backgroundColor: 'transparent',
   },
   remainingUnderneath: {
-    color: 'white',
+    width: ᐱ.percent.w(60),
+    color: '#1d3586',
+    letterSpacing: 2,
   },
+
+
   doneButton: {
     marginTop: ᐱ.percent.h(10),
   },
