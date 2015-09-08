@@ -48,6 +48,7 @@ var Question = React.createClass({
       width: AppConstants.WIDTH,
       saveInProgress: false,
       remainingTextOpacity: 0,
+      doneButtonOpacity: 0,
     };
   },
 
@@ -75,7 +76,7 @@ var Question = React.createClass({
     }
   },
 
-  animateBar: function(){
+  animateBar: function() {
     var secs = secondsRemaining * 1000;
 
     this.state.width = AppConstants.WIDTH;
@@ -87,7 +88,7 @@ var Question = React.createClass({
     });
   },
 
-  animateInRemainingText: function(){
+  animateInRemainingText: function() {
 
     this.tweenState('remainingTextOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
@@ -96,24 +97,36 @@ var Question = React.createClass({
     });
   },
 
+  fadeInDone: function() {
+
+    this.tweenState('doneButtonOpacity', {
+      easing: tweenState.easingTypes.easeOutQuint,
+      delay: 5000,
+      duration: 700,
+      endValue: this.state.doneButtonOpacity === 0 ? 1 : 0,
+    });
+  },
+
   _onChange: function() {
     this.setState({
       user: UserStore.get(),
     });
 
-    if(this.state.user.startRecord && !this.state.user.recordInProgress){
+    if(this.state.user.startRecord && !this.state.user.recordInProgress) {
       this.record();
     }
 
-    if(this.state.user.info && !this.state.saveInProgress){
+    if(this.state.user.info && !this.state.saveInProgress) {
       this.save();
     }
   },
 
   record: function() {
+
     var secs = secondsRemaining * 1000;
 
     AppActions.setRecordInProgress(); //Don't let it record again
+    this.fadeInDone();
 
     this.refs.recorder.record();
     this.setState({
@@ -224,7 +237,7 @@ var Question = React.createClass({
       );
     } else if(this.state.user.startRecord) { //User has started recording video
       button = (
-        <TouchableHighlight onPress={this.handleDone} style={[SharedStyles.buttonContainer, styles.doneButton]} underlayColor="transparent">
+        <TouchableHighlight onPress={this.handleDone} style={[SharedStyles.buttonContainer, styles.doneButton, {opacity: this.getTweeningValue('doneButtonOpacity')}]} underlayColor="transparent">
           <Text style={SharedStyles.buttonText}>DONE!</Text>
         </TouchableHighlight>
       );
