@@ -60,12 +60,12 @@ var Prompt = React.createClass({
     //BAR
     this.tweenState('stripesHeight', {
       easing: tweenState.easingTypes.easeOutQuint,
-      duration: 500,
-      endValue: this.state.stripesHeight === ᐱ.percent.h(27) ? ᐱ.percent.h(10) : ᐱ.percent.h(27),
+      duration: 700,
+      endValue: this.state.stripesHeight === ᐱ.percent.h(27) ? ᐱ.percent.h(5) : ᐱ.percent.h(27),
     });
     this.tweenState('fakeRemainingBarOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
-      duration: 500,
+      duration: 700,
       endValue: this.state.fakeRemainingBarOpacity === 1 ? 0 : 1,
     });
     this.tweenState('buttonOpacity', {
@@ -198,7 +198,7 @@ var styles = StyleSheet.create({
   fakeRemainingBar: {
     backgroundColor: 'white',
     width: ᐱ.percent.w(100),
-    height: ᐱ.percent.h(10),
+    height: ᐱ.percent.h(5),
     position: 'absolute',
     bottom: 0,
     left: 0,
