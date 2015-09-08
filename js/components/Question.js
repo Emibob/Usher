@@ -283,7 +283,7 @@ var Question = React.createClass({
           <Text style={[styles.remainingCount, styles.remainingUnderneath]}>{secs}{this.state.remainingText}</Text>
           <Animated.View style={[styles.remainingBar, {width: this.getTweeningValue('width')}]}>
             <View style={styles.remainingBarTextWrap}>
-            <Animated.Text style={[styles.remainingCount, {opacity: this.getTweeningValue('remainingTextOpacity')}]}>{secs}{this.state.remainingText}</Animated.Text>
+            <Animated.Text style={[styles.remainingCount, {opacity: this.getTweeningValue('remainingTextOpacity')}]}><Text style={{fontWeight: 'bold'}}>{secs}</Text>{this.state.remainingText}</Animated.Text>
             </View>
           </Animated.View>
         </View>
