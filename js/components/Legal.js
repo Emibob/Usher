@@ -88,7 +88,7 @@ var Legal = React.createClass({
       legalCopy = <Text style={[styles.halfScreen, SharedStyles.titleText]}>{this.state.error}</Text>
     } else {
       legalCopy = (
-        <View style={{backgroundColor: 'transparent', flex: 4}}>
+        <View style={{backgroundColor: 'transparent', flex: 3, marginTop: 60}}>
           <Text style={[SharedStyles.messageText, {color: '#facbcb', marginBottom: 0, paddingTop: ᐱ.percent.w(4), fontSize: ᐱ.percent.h(2.5)}]}>Can we feature your thoughts in a Refinery29 video?</Text>
           <Text style={styles.legalCopy}>PHOTO/VIDEO RELEASE: For good and valuable consideration, the receipt and sufficiency of which is hereby acknowledged, I hereby grant to Refinery 29 Inc. (“Company”) and its assigns, licensees, sublicensees, successors-in-interest, legal representatives, and heirs the absolute, irrevocable right and retroactive (if applicable), unrestricted permission to use photograph(s), video, audio, and audio-visual recordings, as well as results and proceeds thereof of my likeness and voice taken of me by or on behalf of the Company (collectively, the “Content”) in all forms, in all medium, in any manner, for any commercial, editorial or any other lawful purposes in connection with photos or videos designated by Refinery29. I hereby waive any right to royalties or other compensation arising from or related to the use of the Content. I also hereby agree to release, defend, and hold harmless the Company and its agents or employees, from and against any claims or liability arising from or related to the rights granted herein. It is the discretion of the Company to decide whether and how to use the Content. I agree to execute in the future any further documents that may be necessary to perfect Company’s ownership of all rights in the Content or other works containing the Content. I acknowledge that I will not have any rights or interest in the assets containing the Content whatsoever. Nothing herein will be construed to obligate Company to produce, distribute or use any of the rights granted herein. This agreement will be construed according to the laws of the State of New York applicable to agreements which are executed and fully performed within said State. This agreement contains the entire understanding of the parties relating to the subject matter, and this agreement cannot be changed except by written agreement executed by the Party to be bound. I hereby warrant that I am at least 18 years old or that I am the parent or guardian of the participant. This release will be binding upon me and my heirs, legal representatives, and assigns. Prior to checking the box, I have read the above authorization, release, and agreement, prior to its execution, and I am fully familiar with the contents thereof.</Text>
         </View>
@@ -160,14 +160,15 @@ var styles = StyleSheet.create({
   },
   legalCopy: {
     color: 'white',
-    fontSize: ᐱ.percent.h(1.6),
-    fontFamily: 'BrownStd-Bold',
+    fontSize: 14,
+    fontFamily: 'BrownStd-Regular',
     backgroundColor: 'transparent',
     paddingLeft: ᐱ.percent.w(8),
     paddingRight: ᐱ.percent.w(8),
     paddingTop: ᐱ.percent.w(4),
-    marginBottom: ᐱ.percent.h(4),
+    marginBottom: ᐱ.percent.h(6),
     width: ᐱ.percent.w(100),
+    lineHeight: 22,
   },
   buttons: {
     flexDirection: 'row',
@@ -185,6 +186,7 @@ var styles = StyleSheet.create({
     marginRight: ᐱ.percent.w(8),
     fontFamily: 'BrownStd-Bold',
     backgroundColor: 'white',
+    paddingLeft: 10,
   },
   halfScreen: {
     flex: 0.5,
