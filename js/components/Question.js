@@ -49,6 +49,7 @@ var Question = React.createClass({
       saveInProgress: false,
       remainingTextOpacity: 0,
       doneButtonOpacity: 0,
+      removeDone: false,
     };
   },
 
@@ -103,7 +104,7 @@ var Question = React.createClass({
       easing: tweenState.easingTypes.easeOutQuint,
       delay: 5000,
       duration: 700,
-      endValue: this.state.doneButtonOpacity === 0 ? 1 : 0,
+      endValue: (this.state.doneButtonOpacity === 0 && !this.state.removeDone) ? 1 : 0,
     });
   },
 
@@ -191,7 +192,11 @@ var Question = React.createClass({
   handleDone: function(){
     clearTimeout(videoTimeout);
     this.pause();
-    this.setState({showTimeRemaining: false});
+    this.setState({
+      showTimeRemaining: false,
+      removeDone: true,
+    });
+    this.fadeInDone();//TODO: rename this & make it suck less
   },
 
   resetUser: function(){
