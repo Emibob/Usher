@@ -32,6 +32,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>fonts/BrownStd-Bold.otf</string>
+		<string>fonts/BrownStd-Light.otf</string>
 		<string>fonts/BrownStd-Regular.otf</string>
 		<string>fonts/playfairdisplaybold.ttf</string>
 	</array>

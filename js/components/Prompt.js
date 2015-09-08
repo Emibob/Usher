@@ -31,6 +31,8 @@ var Prompt = React.createClass({
       stripesHeight: ᐱ.percent.h(27),
       buttonOpacity: 1,
       fakeRemainingBarOpacity: 0,
+      infoOpacity: 1,
+      recorderPosition: ᐱ.percent.h(6),
     };
   },
 
@@ -50,26 +52,42 @@ var Prompt = React.createClass({
   },
 
   handleAppInit: function(){
-    this.animateHeight();
-    setTimeout(AppAction.initApp, 1000)
+    this.animatePage();
+    setTimeout(AppAction.initApp, 2000)
   },
 
-  animateHeight: function(){
-
+  animatePage: function(){
+    //BAR
     this.tweenState('stripesHeight', {
       easing: tweenState.easingTypes.easeOutQuint,
-      duration: 1000,
+      duration: 500,
       endValue: this.state.stripesHeight === ᐱ.percent.h(27) ? ᐱ.percent.h(10) : ᐱ.percent.h(27),
     });
     this.tweenState('fakeRemainingBarOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
-      duration: 1000,
+      duration: 500,
       endValue: this.state.fakeRemainingBarOpacity === 1 ? 0 : 1,
     });
     this.tweenState('buttonOpacity', {
       easing: tweenState.easingTypes.easeOutQuint,
       duration: 200,
       endValue: this.state.buttonOpacity === 0 ? 1 : 0,
+    });
+
+    //TEXT & LOGO
+    this.tweenState('infoOpacity', {
+      easing: tweenState.easingTypes.easeOutQuint,
+      delay: 500,
+      duration: 700,
+      endValue: this.state.infoOpacity === 1 ? 0 : 1,
+    });
+
+    //REC
+    this.tweenState('recorderPosition', {
+      easing: tweenState.easingTypes.easeOutQuint,
+      delay: 1200,
+      duration: 900,
+      endValue: this.state.recorderPosition === ᐱ.percent.h(6) ? ᐱ.percent.h(39) : ᐱ.percent.h(6),
     });
   },
 
@@ -79,9 +97,9 @@ var Prompt = React.createClass({
 
         <Image style={styles.patternPrimary} source={require('image!stars')} />
 
-        <Image style={styles.logo} source={require('image!whitelogo')} />
+        <Image style={[styles.logo, {opacity: this.getTweeningValue('infoOpacity')}]} source={require('image!whitelogo')} />
 
-        <Text style={[SharedStyles.titleText, {marginTop: 20}]}>IF YOU HAD 45 SECONDS,{'\n'} WHAT WOULD YOU{'\n'} TELL THE PRESIDENT?</Text>
+        <Text style={[SharedStyles.titleText, {marginTop: 20, opacity: this.getTweeningValue('infoOpacity')}]}>IF YOU HAD 45 SECONDS,{'\n'} WHAT WOULD YOU{'\n'} TELL THE PRESIDENT?</Text>
 
         <View style={styles.stripesContainer}>
           <Image style={[styles.patternSecondary, {height: this.getTweeningValue('stripesHeight')}]} source={require('image!pinkstripes')} />
@@ -95,7 +113,7 @@ var Prompt = React.createClass({
         </View>
 
         <View style={styles.cameraContainer}>
-          <View style={styles.cameraBorder}>
+          <View style={[styles.cameraBorder, {marginTop: this.getTweeningValue('recorderPosition')}]}>
             <Recorder
                 ref="recorder"
                 config={config}

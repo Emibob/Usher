@@ -23,7 +23,7 @@ var Countdown = React.createClass({
   getInitialState: function() {
     return {
       user: this.props.user,
-      marginTop: 0,
+      marginTop: ᐱ.percent.h(-6),
       opacity: 1,
     };
   },
@@ -37,7 +37,6 @@ var Countdown = React.createClass({
     UserStore.removeChangeListener(this._onChange);
   },
 
-
   _onChange: function() {
     this.setState({
       user: UserStore.get(),
@@ -50,14 +49,13 @@ var Countdown = React.createClass({
   },
 
   animateOpacity: function(){
-
-    this.state.marginTop = 0;
+    this.state.marginTop = ᐱ.percent.h(-6);
     this.state.opacity = 1;
 
     this.tweenState('marginTop', {
       easing: tweenState.easingTypes.easeOutQuint,
       duration: 1000,
-      endValue: this.state.marginTop === -40 ? 0 : -40,
+      endValue: this.state.marginTop === ᐱ.percent.h(-7) ? ᐱ.percent.h(-6) : ᐱ.percent.h(-7),
     });
     this.tweenState('opacity', {
       easing: tweenState.easingTypes.easeOutQuint,
@@ -67,21 +65,13 @@ var Countdown = React.createClass({
   },
 
   render: function() {
-    var countdown;
-
-      countdown = (
-        <View style={{backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={styles.lowerText}>{this.state.user.timeRemaining}</Text>
-          <Animated.Text style={{fontWeight: 'bold', backgroundColor: 'transparent', position:'absolute', fontSize: 30, marginTop: this.getTweeningValue('marginTop'), opacity: this.getTweeningValue('opacity'), color: 'white'}}>
-            {this.state.user.timeRemaining + 1}
-          </Animated.Text>
-        </View>
-      );
-
     return(
         <View style={styles.countdown}>
           <View style={styles.circle}>
-            {countdown}
+            
+              <Text style={styles.numbers}>{this.state.user.timeRemaining}</Text>
+              <Animated.Text style={[styles.numbers, {marginTop: this.getTweeningValue('marginTop'), opacity: this.getTweeningValue('opacity')}]}>{this.state.user.timeRemaining + 1}</Animated.Text>
+
           </View>
         </View>
     );
@@ -89,12 +79,14 @@ var Countdown = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  lowerText: {
+  numbers: {
     position: 'absolute', 
     color: 'white', 
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: ᐱ.percent.w(10), //30
     backgroundColor: 'transparent',
+    marginLeft: ᐱ.percent.w(10),
+    marginTop: ᐱ.percent.h(-6),
+    fontFamily: 'BrownStd-Light',
   },
   countdown: {
     alignItems: 'center',
@@ -102,23 +94,19 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent',
     width: ᐱ.percent.w(60),
     height: ᐱ.percent.w(60),
-  },
-  countdownNumbers: {
-    color: 'white',
-    fontFamily: 'BrownStd-Bold',
-    fontSize: ᐱ.percent.h(40),
-    backgroundColor: 'transparent',
+    // borderWidth: 4,
+    // borderColor: 'yellow',
   },
   circle: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
-    borderWidth: 3,
+    borderWidth: 4,
     borderColor: 'white',
-    width: ᐱ.percent.w(30),
-    height: ᐱ.percent.w(30),
+    width: ᐱ.percent.w(25),
+    height: ᐱ.percent.w(25),
     borderRadius: ᐱ.percent.w(15),
-  }
+  },
 });
 
 module.exports = Countdown;
